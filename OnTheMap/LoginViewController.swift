@@ -33,13 +33,20 @@ class LoginViewController: UIViewController {
     @IBAction func loginButton(_ sender: UIButton) {
         loadingDot.startAnimating()
         loadingDot.alpha = 1
-        print("LoginButton Clicked")
-        UdacityClient.sharedInstance().getSessionID { (succes, errorString) in
-            if succes {
-                print("GetSessionID was a succes")
-                self.performSegue(withIdentifier: "LoginToTabBarControllerSegue" , sender: self)
-                print("Performed Segue")
-                self.loadingDot.stopAnimating()
+        print("1")
+        DispatchQueue.global(qos: .userInitiated).async {
+            print("2")
+            UdacityClient.sharedInstance().getSessionID { (succes, errorString) in
+                print("3")
+                DispatchQueue.main.async {
+                    print("4")
+                    if succes {
+                        print("5")
+                        self.performSegue(withIdentifier: "LoginToTabBarControllerSegue" , sender: self)
+                        print("6")
+                    }
+                }
+              self.loadingDot.stopAnimating()
             }
         }
     }

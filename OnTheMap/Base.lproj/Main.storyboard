@@ -166,13 +166,26 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Map" selectedImage="icon_mapview-selected" id="V91-0W-FEB"/>
                     <navigationItem key="navigationItem" title="On The Map" id="juz-LL-lsb">
-                        <barButtonItem key="backBarButtonItem" title="Logout" id="Lvf-Mx-bQ4"/>
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="Lvf-Mx-bQ4">
+                            <connections>
+                                <action selector="LogoutButtonAction:" destination="cxC-rL-P6N" id="NYo-cc-Ul2"/>
+                            </connections>
+                        </barButtonItem>
                         <rightBarButtonItems>
-                            <barButtonItem image="icon_refresh" id="TPo-Jm-ps6"/>
-                            <barButtonItem image="icon_pin" id="h4Z-mz-RJS"/>
+                            <barButtonItem image="icon_refresh" id="TPo-Jm-ps6">
+                                <connections>
+                                    <action selector="RefreshButtonAction:" destination="cxC-rL-P6N" id="zaW-L7-KVX"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="icon_pin" id="h4Z-mz-RJS">
+                                <connections>
+                                    <action selector="PinButtonAction:" destination="cxC-rL-P6N" id="7iq-0g-LAD"/>
+                                </connections>
+                            </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="LogoutButtonOutlet" destination="Lvf-Mx-bQ4" id="U7K-fT-G9f"/>
                         <outlet property="MapView" destination="oGg-Id-Q6f" id="dPY-t5-bbl"/>
                         <outlet property="PinButton" destination="h4Z-mz-RJS" id="iCp-jN-geh"/>
                         <outlet property="RefreshButton" destination="TPo-Jm-ps6" id="3t4-bp-sWy"/>
