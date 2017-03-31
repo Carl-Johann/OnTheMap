@@ -6,4 +6,23 @@
 //  Copyright © 2017 Carl-Johan. All rights reserved.
 //
 
-import Foundation
+import MapKit
+import UIKit
+
+class MapViewController: UIViewController, MKMapViewDelegate {
+    
+    @IBOutlet var PinButton: UIBarButtonItem!
+    @IBOutlet var RefreshButton: UIBarButtonItem!
+    @IBOutlet var MapView: MKMapView!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+    }
+    
+    @IBAction func LogoutButtonAction(_ sender: Any) {
+        print("lrt")
+    }
+    
+    
+}
