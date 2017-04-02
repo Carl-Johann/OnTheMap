@@ -36,7 +36,7 @@ struct UdacityStudent {
         
     }
     
-    static func loctationFromStudents(_ results: [[String:AnyObject]]) -> [UdacityStudent] {
+    static func dataFromStudents(_ results: [[String:AnyObject]]) -> [UdacityStudent] {
         
         var StudentData = [UdacityStudent]()
         

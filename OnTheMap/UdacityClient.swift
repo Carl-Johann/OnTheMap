@@ -11,93 +11,99 @@ import Foundation
 class UdacityClient : NSObject {
 
     var session = URLSession.shared
-
+    
+    var students: [UdacityStudent] = [UdacityStudent]()
     var sessionID: String? = nil
     var accountKey: Int? = nil
     
     
     
     func getSessionID( completionHandlerForSessionID: @escaping (_ succes: Bool, _ error: String? ) -> Void) {
-        print("7")
+
         let request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
-        print("8")
+
         request.httpMethod = "POST"
-        print("9")
+
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        print("10")
+
         request.httpBody = "{\"udacity\": {\"username\": \"carljohan.beurling@gmail.com\", \"password\": \"joeercool2\"}}".data(using: String.Encoding.utf8)
-        print("11")
+
         
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
-            print("12")
+
             if error != nil { // Handle error…
                 return
             }
-            print("13")
+
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
                 print("Your request returned a status code other than 2xx!")
                 return
             }
-            print("14")
+
             let range = Range(5 ..< data!.count)
             let newData = data?.subdata(in: range) /* subset response data! */
-            print("15")
+
             let parsedResult = try! JSONSerialization.jsonObject(with: newData!, options: .allowFragments) as AnyObject
-            print("16")
+
             /* if let account = parsedResult["account"] as? [String:AnyObject] {
                 if let accountKey = account["key"] as? Int {
                     self.accountKey = accountKey
                 }
             } */
-            print("17")
+
             if let session = parsedResult["session"] as? [String:AnyObject] {
-                print("18")
+
                 if let sessionID = session["id"] {
-                    print("19")
+
                     self.sessionID = sessionID as? String
                 }
             } else {
                 completionHandlerForSessionID(false, "There was an error with getting the sessionID from Udacity's servers")
             }
-            print("20")
-            completionHandlerForSessionID(true, nil)            
+            
+            completionHandlerForSessionID(true, nil)
         }
-        print("22")
+
         task.resume()
 
     }
 
-    func getStudentData(completionHandlerForStudentData: @escaping (_ studentData: [UdacityStudent]?, _ succes: Bool, _ error: String? ) -> Void) {
+    func getStudentData(completionHandlerForStudentData: @escaping ( _ succes: Bool, _ error: String? ) -> Void) {
+        
+        
         
         let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
         
         request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
-    
+        
         
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             
             guard (error == nil) else {
                 print("There was an error with GETting student Locations")
-                completionHandlerForStudentData(nil, false, "There was an error with GETting student Locations")
+                completionHandlerForStudentData(false, "There was an error with GETting student Locations")
                 return
             }
             
             let parsedResult = try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as AnyObject
             
-
+            
             guard let results = parsedResult["results"] as? [[String:AnyObject]] else {
                 print("Couldn't find any results")
-                completionHandlerForStudentData(nil, false, "Couldn't find any results")
+                completionHandlerForStudentData(false, "Couldn't find any results")
                 return
             }
-            let structuredStudentData = UdacityStudent.loctationFromStudents(results)
-            completionHandlerForStudentData(structuredStudentData, true, nil)
+            let structuredStudentData = UdacityStudent.dataFromStudents(results)
+            self.students = structuredStudentData
+            completionHandlerForStudentData(true, nil)
         }
         
         task.resume()
+        
     }
+    
     
     class func sharedInstance() -> UdacityClient {
         struct Singleton {
