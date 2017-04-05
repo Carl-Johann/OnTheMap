@@ -30,9 +30,21 @@ struct UdacityStudent {
         lastName = dictionary[UdacityClient.StudentLocationJSONResponseKeys.LastName] as! String
         latitude = dictionary[UdacityClient.StudentLocationJSONResponseKeys.Latitude] as! Double
         longitude = dictionary[UdacityClient.StudentLocationJSONResponseKeys.Longitude] as! Double
-        mapString = dictionary[UdacityClient.StudentLocationJSONResponseKeys.MapString] as! String
-        mediaURl = dictionary[UdacityClient.StudentLocationJSONResponseKeys.MediaURL] as! String
         objectID = dictionary[UdacityClient.StudentLocationJSONResponseKeys.ObjectId] as! String
+        
+        if dictionary[UdacityClient.StudentLocationJSONResponseKeys.MapString] is String {
+            mapString = dictionary[UdacityClient.StudentLocationJSONResponseKeys.MapString] as! String
+        } else {
+            print("mapString's value was set to ' \("") ' due to not being returned a String")
+            mapString = ""
+        }
+        
+        if dictionary[UdacityClient.StudentLocationJSONResponseKeys.MediaURL] is String {
+            mediaURl = dictionary[UdacityClient.StudentLocationJSONResponseKeys.MediaURL] as! String
+        } else {
+            print("mediaURl value was set to ' \("") ' due to not being returned a String")
+            mediaURl = ""
+        }
         
     }
     

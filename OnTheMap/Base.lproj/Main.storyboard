@@ -113,8 +113,8 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gnJ-2P-xFq">
                                 <rect key="frame" x="0.0" y="533" width="414" height="203"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B2k-sg-bh3">
-                                        <rect key="frame" x="130.33333333333331" y="84" width="154.99999999999994" height="36"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B2k-sg-bh3" customClass="RoundedButton" customModule="OnTheMap" customModuleProvider="target">
+                                        <rect key="frame" x="129.66666666666669" y="84" width="155.00000000000006" height="36"/>
                                         <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
                                         <state key="normal">
                                             <attributedString key="attributedTitle">
@@ -182,7 +182,6 @@
         <!--Navigation Controller-->
         <scene sceneID="xOK-8g-fMa">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="MTm-XR-YKV" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController id="bbU-hk-6bX" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="icon_listview-selected" id="cQg-hB-CDT"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="1gr-xc-HyF">
@@ -193,13 +192,13 @@
                         <segue destination="2si-wa-ldJ" kind="relationship" relationship="rootViewController" id="zIN-Sq-KZQ"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MTm-XR-YKV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1842" y="450"/>
         </scene>
         <!--List View-->
         <scene sceneID="tV5-p9-ntr">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="1Sg-f2-kC3" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController title="List View" id="2si-wa-ldJ" customClass="TableViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="9Cl-QC-Cz2"/>
@@ -268,6 +267,7 @@
                             <barButtonItem image="icon_addpin" id="gpK-lN-CUI">
                                 <connections>
                                     <action selector="PinButtonAction:" destination="2si-wa-ldJ" id="yEc-bG-89u"/>
+                                    <segue destination="l50-RT-p0N" kind="presentation" id="rF1-DR-NfN"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem image="icon_refresh" id="h2I-RD-VSb">
@@ -285,6 +285,7 @@
                         <outlet property="RefreshButtonOutlet" destination="h2I-RD-VSb" id="5pi-Wa-VW3"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1Sg-f2-kC3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2576.8000000000002" y="450.22488755622192"/>
         </scene>
@@ -372,6 +373,7 @@
                             <barButtonItem image="icon_addpin" id="h4Z-mz-RJS" userLabel="I">
                                 <connections>
                                     <action selector="PinButtonAction:" destination="cxC-rL-P6N" id="7iq-0g-LAD"/>
+                                    <segue destination="l50-RT-p0N" kind="presentation" id="4vt-NJ-uVg"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem image="icon_refresh" id="TPo-Jm-ps6">
@@ -397,7 +399,6 @@
         <!--Navigation Controller-->
         <scene sceneID="FgM-Ob-9nY">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="umI-d9-prF" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController id="kzI-Bk-aZ6" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="icon_mapview-selected" id="IJz-XR-h6N"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="odG-yK-MVH">
@@ -408,6 +409,7 @@
                         <segue destination="cxC-rL-P6N" kind="relationship" relationship="rootViewController" id="hBN-VA-Wh6"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="umI-d9-prF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1841" y="-224"/>
         </scene>
@@ -438,4 +440,7 @@
         <image name="icon_refresh" width="24" height="24"/>
         <image name="logo-u" width="62" height="62"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="rF1-DR-NfN"/>
+    </inferredMetricsTieBreakers>
 </document>
