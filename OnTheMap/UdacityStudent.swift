@@ -6,19 +6,19 @@
 //  Copyright © 2017 Carl-Johan. All rights reserved.
 //
 
- import Foundation
+import Foundation
 
 struct UdacityStudent {
     
     // MARK: Properties
     
-    let firstName: String
-    let lastName: String
-    let latitude: Double
-    let longitude: Double
-    let mapString: String
-    let mediaURl: String
-    let objectID: String
+    var firstName: String = ""
+    var lastName: String = ""
+    var latitude: Double? = 0.0
+    var longitude: Double? = 0.0
+    var mapString: String? = ""
+    var mediaURl: String? = ""
+    var objectID: String = ""
     
     
     // MARK: Initializers
@@ -28,24 +28,25 @@ struct UdacityStudent {
         
         firstName =  dictionary[UdacityClient.StudentLocationJSONResponseKeys.FirstName] as! String
         lastName = dictionary[UdacityClient.StudentLocationJSONResponseKeys.LastName] as! String
-        latitude = dictionary[UdacityClient.StudentLocationJSONResponseKeys.Latitude] as! Double
-        longitude = dictionary[UdacityClient.StudentLocationJSONResponseKeys.Longitude] as! Double
+        
+        if let latitude = dictionary[UdacityClient.StudentLocationJSONResponseKeys.Latitude] as! Double? {
+            self.latitude = latitude
+        }
+        
+        if let longitude = dictionary[UdacityClient.StudentLocationJSONResponseKeys.Longitude] as! Double? {
+            self.longitude = longitude
+        }
+        
         objectID = dictionary[UdacityClient.StudentLocationJSONResponseKeys.ObjectId] as! String
         
-        if dictionary[UdacityClient.StudentLocationJSONResponseKeys.MapString] is String {
-            mapString = dictionary[UdacityClient.StudentLocationJSONResponseKeys.MapString] as! String
-        } else {
-            print("mapString's value was set to ' \("") ' due to not being returned a String")
-            mapString = ""
+        if let mapString = dictionary[UdacityClient.StudentLocationJSONResponseKeys.MapString] as! String? {
+            self.mapString = mapString
         }
         
-        if dictionary[UdacityClient.StudentLocationJSONResponseKeys.MediaURL] is String {
-            mediaURl = dictionary[UdacityClient.StudentLocationJSONResponseKeys.MediaURL] as! String
-        } else {
-            print("mediaURl value was set to ' \("") ' due to not being returned a String")
-            mediaURl = ""
+        if let mediaURl = dictionary[UdacityClient.StudentLocationJSONResponseKeys.MediaURL] as! String? {
+            self.mediaURl = mediaURl
         }
-        
+    
     }
     
     static func dataFromStudents(_ results: [[String:AnyObject]]) -> [UdacityStudent] {

@@ -10,7 +10,7 @@ import Foundation
 
 
 extension UdacityClient {
-    
+       
     struct StudentLocationJSONResponseKeys {
         
         static let CreatedAt = "createdAt"

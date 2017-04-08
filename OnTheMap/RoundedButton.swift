@@ -11,15 +11,15 @@ import UIKit
 
 class RoundedButton: UIButton {
     
+    
     // constants for styling and configuration
     let darkerBlue = UIColor(red: 0.0, green: 0.298, blue: 0.686, alpha:1.0)
     let lighterBlue = UIColor(red: 0.0, green:0.502, blue:0.839, alpha: 1.0)
     let titleLabelFontSize: CGFloat = 17.0
     let borderedButtonHeight: CGFloat = 44.0
-    let borderedButtonCornerRadius: CGFloat = 4.0
+    let borderedButtonCornerRadius: CGFloat = 6.0
     let phoneBorderedButtonExtraPadding: CGFloat = 14.0
-    
-    var backingColor: UIColor? = nil
+    let whiteBackGroundColor = UIColor.white
     var highlightedBackingColor: UIColor? = nil
     
     // MARK: Initialization
@@ -38,39 +38,35 @@ class RoundedButton: UIButton {
         layer.masksToBounds = true
         layer.cornerRadius = borderedButtonCornerRadius
         highlightedBackingColor = darkerBlue
-        backingColor = lighterBlue
-        backgroundColor = lighterBlue
+        contentHorizontalAlignment = .center
+        contentVerticalAlignment = .center
+        contentEdgeInsets = UIEdgeInsetsMake(3, 13, 3, 13)
+        
         setTitleColor(.white, for: UIControlState())
         titleLabel?.font = UIFont.systemFont(ofSize: titleLabelFontSize)
     }
     
     // MARK: Setters
     
-    private func setBackingColor(_ newBackingColor: UIColor) {
-        if let _ = backingColor {
-            backingColor = newBackingColor
-            backgroundColor = newBackingColor
-        }
-    }
+   
     
     private func setHighlightedBackingColor(_ newHighlightedBackingColor: UIColor) {
+        print("setHighlightedBackingColor")
         highlightedBackingColor = newHighlightedBackingColor
-        backingColor = highlightedBackingColor
     }
     
     // MARK: Tracking
     
     override func beginTracking(_ touch: UITouch, with withEvent: UIEvent?) -> Bool {
-        backgroundColor = highlightedBackingColor
+        backgroundColor = lighterBlue
         return true
     }
     
     override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
-        backgroundColor = backingColor
+        backgroundColor = whiteBackGroundColor
     }
     
     override func cancelTracking(with event: UIEvent?) {
-        backgroundColor = backingColor
     }
     
     // MARK: Layout

@@ -69,8 +69,8 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
         let StudentAtRow = self.students[indexPath[1]]
         
-        if isURlValid(StudentAtRow.mediaURl) {
-            let mediaURl = URL(string: StudentAtRow.mediaURl)
+        if isURlValid(StudentAtRow.mediaURl!) {
+            let mediaURl = URL(string: StudentAtRow.mediaURl!)
             
             DispatchQueue.global(qos: .userInteractive).async {
                 

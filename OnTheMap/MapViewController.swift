@@ -13,7 +13,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     var students: [UdacityStudent] = [UdacityStudent]()
     var annotations: [MKPointAnnotation] = []
-
     
     @IBOutlet var PinButton: UIBarButtonItem!
     @IBOutlet var RefreshButton: UIBarButtonItem!
@@ -33,11 +32,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         setupMap { (succes, errorString) in
             if let errorString = errorString { print(errorString) }
         }
+        
     }
     
     @IBAction func LogoutButtonAction(_ sender: Any) {
         
     }
+    
     
     
     @IBAction func PinButtonAction(_ sender: Any) {
@@ -53,6 +54,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         
     }
+    
+    
     
     
     func isURlValid(_ url: String)-> Bool {
@@ -76,7 +79,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         case false:
             self.MapView.alpha = 1
             self.ActivityIndicator.stopAnimating()
-            
             self.RefreshButton.isEnabled = true
         }
     }
@@ -106,8 +108,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         for student in self.students {
             
-            let lat = CLLocationDegrees(student.latitude)
-            let long = CLLocationDegrees(student.longitude)
+            let lat = CLLocationDegrees(student.latitude!)
+            let long = CLLocationDegrees(student.longitude!)
             
             
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)

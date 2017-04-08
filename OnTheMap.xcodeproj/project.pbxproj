@@ -13,11 +13,13 @@
 		232AC78E1E8E482B00A97A33 /* UdacityStudent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232AC78D1E8E482B00A97A33 /* UdacityStudent.swift */; };
 		232AC7901E8E826F00A97A33 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232AC78F1E8E826F00A97A33 /* TableViewController.swift */; };
 		232D8A771E93F17E0065C675 /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232D8A761E93F17E0065C675 /* RoundedButton.swift */; };
+		232D8A791E9680800065C675 /* AddPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232D8A781E96807F0065C675 /* AddPinViewController.swift */; };
 		238AC94C1E8D66F900DBCF16 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238AC94B1E8D66F900DBCF16 /* AppDelegate.swift */; };
 		238AC94E1E8D66F900DBCF16 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238AC94D1E8D66F900DBCF16 /* LoginViewController.swift */; };
 		238AC9511E8D66F900DBCF16 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 238AC94F1E8D66F900DBCF16 /* Main.storyboard */; };
 		238AC9531E8D66F900DBCF16 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 238AC9521E8D66F900DBCF16 /* Assets.xcassets */; };
 		238AC9561E8D66F900DBCF16 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 238AC9541E8D66F900DBCF16 /* LaunchScreen.storyboard */; };
+		23A8AC0E1E993A95004E7C8E /* AddPinMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A8AC0D1E993A95004E7C8E /* AddPinMapViewController.swift */; };
 		23D949731E8EE8E400B59865 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D949721E8EE8E400B59865 /* WebViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -28,6 +30,7 @@
 		232AC78D1E8E482B00A97A33 /* UdacityStudent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityStudent.swift; sourceTree = "<group>"; };
 		232AC78F1E8E826F00A97A33 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		232D8A761E93F17E0065C675 /* RoundedButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundedButton.swift; sourceTree = "<group>"; };
+		232D8A781E96807F0065C675 /* AddPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddPinViewController.swift; sourceTree = "<group>"; };
 		238AC9481E8D66F900DBCF16 /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		238AC94B1E8D66F900DBCF16 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		238AC94D1E8D66F900DBCF16 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -35,6 +38,7 @@
 		238AC9521E8D66F900DBCF16 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		238AC9551E8D66F900DBCF16 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		238AC9571E8D66F900DBCF16 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		23A8AC0D1E993A95004E7C8E /* AddPinMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddPinMapViewController.swift; sourceTree = "<group>"; };
 		23D949721E8EE8E400B59865 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -49,16 +53,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2314C1731E8E38E600CC67A9 /* Views */ = {
+		2314C1731E8E38E600CC67A9 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				238AC94D1E8D66F900DBCF16 /* LoginViewController.swift */,
 				2314C1741E8E38FB00CC67A9 /* MapViewController.swift */,
 				232AC78F1E8E826F00A97A33 /* TableViewController.swift */,
+				23A8AC0D1E993A95004E7C8E /* AddPinMapViewController.swift */,
+				232D8A781E96807F0065C675 /* AddPinViewController.swift */,
 				23D949721E8EE8E400B59865 /* WebViewController.swift */,
-				232D8A751E93F0020065C675 /* Buttons */,
+				232D8A751E93F0020065C675 /* Views */,
 			);
-			name = Views;
+			name = Controllers;
 			sourceTree = "<group>";
 		};
 		232226061E8D8A0F00F62464 /* Clients */ = {
@@ -90,12 +96,12 @@
 			name = Assets;
 			sourceTree = "<group>";
 		};
-		232D8A751E93F0020065C675 /* Buttons */ = {
+		232D8A751E93F0020065C675 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				232D8A761E93F17E0065C675 /* RoundedButton.swift */,
 			);
-			name = Buttons;
+			name = Views;
 			sourceTree = "<group>";
 		};
 		238AC93F1E8D66F900DBCF16 = {
@@ -118,7 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				238AC94B1E8D66F900DBCF16 /* AppDelegate.swift */,
-				2314C1731E8E38E600CC67A9 /* Views */,
+				2314C1731E8E38E600CC67A9 /* Controllers */,
 				232226061E8D8A0F00F62464 /* Clients */,
 				2322260C1E8D9DB100F62464 /* Assets */,
 			);
@@ -203,7 +209,9 @@
 				232226091E8D8AB500F62464 /* UdacityConstants.swift in Sources */,
 				232226011E8D890500F62464 /* UdacityClient.swift in Sources */,
 				232D8A771E93F17E0065C675 /* RoundedButton.swift in Sources */,
+				23A8AC0E1E993A95004E7C8E /* AddPinMapViewController.swift in Sources */,
 				238AC94E1E8D66F900DBCF16 /* LoginViewController.swift in Sources */,
+				232D8A791E9680800065C675 /* AddPinViewController.swift in Sources */,
 				2314C1751E8E38FB00CC67A9 /* MapViewController.swift in Sources */,
 				238AC94C1E8D66F900DBCF16 /* AppDelegate.swift in Sources */,
 				23D949731E8EE8E400B59865 /* WebViewController.swift in Sources */,

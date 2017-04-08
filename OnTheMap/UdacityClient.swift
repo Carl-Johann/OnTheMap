@@ -45,21 +45,21 @@ class UdacityClient : NSObject {
             let newData = data?.subdata(in: range) /* subset response data! */
 
             let parsedResult = try! JSONSerialization.jsonObject(with: newData!, options: .allowFragments) as AnyObject
+            print(parsedResult)
 
-            /* if let account = parsedResult["account"] as? [String:AnyObject] {
-                if let accountKey = account["key"] as? Int {
-                    self.accountKey = accountKey
-                }
-            } */
-
-            if let session = parsedResult["session"] as? [String:AnyObject] {
-
-                if let sessionID = session["id"] {
-
-                    self.sessionID = sessionID as? String
-                }
+            if let session = parsedResult["session"] as? [String:AnyObject] { if let sessionID = session["id"] {
+                    self.sessionID = sessionID as? String }
             } else {
                 completionHandlerForSessionID(false, "There was an error with getting the sessionID from Udacity's servers")
+            }
+            
+            
+            if let account = parsedResult["account"] as? [String:AnyObject] {
+                if let uniqueKey = account["key"] as? Int {
+                    self.accountKey = uniqueKey
+                }
+            } else {
+                completionHandlerForSessionID(false, "Couldn't find an account ID")
             }
             
             completionHandlerForSessionID(true, nil)
