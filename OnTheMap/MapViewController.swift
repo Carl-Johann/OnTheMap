@@ -36,26 +36,25 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     @IBAction func LogoutButtonAction(_ sender: Any) {
-        
-    }
-    
-    
-    
-    @IBAction func PinButtonAction(_ sender: Any) {
-    }
-    
-    
-    @IBAction func RefreshButtonAction(_ sender: Any) {
         loading(true)
-        
-        self.setupMap { (succes, errorString) in
-            self.loading(false)
+        DispatchQueue.global(qos: .userInitiated).async {
+            UdacityClient.sharedInstance().logout { (succes, error) in
+                if succes { DispatchQueue.main.async {
+                    self.dismiss(animated: true, completion: nil) }
+                    self.loading(false)
+                }
+            }
         }
-        
-        
     }
     
     
+    
+    
+    @IBAction func RefreshButton(_ sender: Any) {
+        loading(true)
+        self.setupMap { (succes, errorString) in
+            self.loading(false) }
+    }    
     
     
     func isURlValid(_ url: String)-> Bool {
@@ -70,18 +69,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         return false
     }
     
-    func loading(_ isLoading: Bool) {
-        switch isLoading {
-        case true:
-            self.MapView.alpha = 0.4
-            self.ActivityIndicator.startAnimating()
-            self.RefreshButton.isEnabled = false
-        case false:
-            self.MapView.alpha = 1
-            self.ActivityIndicator.stopAnimating()
-            self.RefreshButton.isEnabled = true
-        }
-    }
     
     func setupMap(completionHandlerForSetupMap: @escaping (_ succes: Bool, _ errorString: String?) -> Void ) {
         self.annotations.removeAll()
@@ -117,8 +104,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
-            annotation.title = "\(student.firstName) \(student.lastName)"
-            annotation.subtitle = student.mediaURl
+            annotation.title = "\(student.firstName!) \(student.lastName!)"
+            annotation.subtitle = student.mediaURl!
             
             
             self.annotations.append(annotation)
@@ -179,6 +166,21 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
         
     }
+    
+    
+    func loading(_ isLoading: Bool) {
+        switch isLoading {
+        case true:
+            self.MapView.alpha = 0.4
+            self.ActivityIndicator.startAnimating()
+            self.RefreshButton.isEnabled = false
+        case false:
+            self.MapView.alpha = 1
+            self.ActivityIndicator.stopAnimating()
+            self.RefreshButton.isEnabled = true
+        }
+    }
+
     
 }
 

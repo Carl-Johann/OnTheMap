@@ -11,19 +11,6 @@ import UIKit
 
 class RoundedButton: UIButton {
     
-    
-    // constants for styling and configuration
-    let darkerBlue = UIColor(red: 0.0, green: 0.298, blue: 0.686, alpha:1.0)
-    let lighterBlue = UIColor(red: 0.0, green:0.502, blue:0.839, alpha: 1.0)
-    let titleLabelFontSize: CGFloat = 17.0
-    let borderedButtonHeight: CGFloat = 44.0
-    let borderedButtonCornerRadius: CGFloat = 6.0
-    let phoneBorderedButtonExtraPadding: CGFloat = 14.0
-    let whiteBackGroundColor = UIColor.white
-    var highlightedBackingColor: UIColor? = nil
-    
-    // MARK: Initialization
-    
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)!
         themeBorderedButton()
@@ -36,47 +23,20 @@ class RoundedButton: UIButton {
     
     private func themeBorderedButton() {
         layer.masksToBounds = true
-        layer.cornerRadius = borderedButtonCornerRadius
-        highlightedBackingColor = darkerBlue
+        layer.cornerRadius = 4
         contentHorizontalAlignment = .center
         contentVerticalAlignment = .center
         contentEdgeInsets = UIEdgeInsetsMake(3, 13, 3, 13)
-        
-        setTitleColor(.white, for: UIControlState())
-        titleLabel?.font = UIFont.systemFont(ofSize: titleLabelFontSize)
     }
     
-    // MARK: Setters
-    
-   
-    
-    private func setHighlightedBackingColor(_ newHighlightedBackingColor: UIColor) {
-        print("setHighlightedBackingColor")
-        highlightedBackingColor = newHighlightedBackingColor
-    }
-    
-    // MARK: Tracking
-    
-    override func beginTracking(_ touch: UITouch, with withEvent: UIEvent?) -> Bool {
-        backgroundColor = lighterBlue
+    override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+        backgroundColor = UIColor.lightGray.withAlphaComponent(0.7)
         return true
     }
     
     override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
-        backgroundColor = whiteBackGroundColor
+        backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
     }
     
-    override func cancelTracking(with event: UIEvent?) {
-    }
-    
-    // MARK: Layout
-    
-    override func sizeThatFits(_ size: CGSize) -> CGSize {
-        let extraButtonPadding : CGFloat = phoneBorderedButtonExtraPadding
-        var sizeThatFits = CGSize.zero
-        sizeThatFits.width = super.sizeThatFits(size).width + extraButtonPadding
-        sizeThatFits.height = borderedButtonHeight
-        return sizeThatFits
-    }
     
 }

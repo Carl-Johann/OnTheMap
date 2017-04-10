@@ -12,13 +12,11 @@ import MapKit
 class AddPinViewController: UIViewController {
     
     
-    @IBOutlet var TopGrayFieldText: UILabel!
     @IBOutlet var LocationTextField: UITextField!
-    @IBOutlet var ButtomGrayField: UIView!
-    @IBOutlet var FindOnTheMapButton: UIButton!
     @IBOutlet var LinkTextField: UITextField!
-    @IBOutlet var CreatePinButton: UIButton!
+    @IBOutlet var FindOnTheMapButton: UIButton!
     
+    let geocoder = CLGeocoder()
     
     
     override func viewDidLoad() {
@@ -33,25 +31,6 @@ class AddPinViewController: UIViewController {
     }
     
     
-    func postPin() {
-        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
-        request.httpMethod = "POST"
-        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = "{\"uniqueKey\": \"\(UdacityClient.sharedInstance().accountKey)\", \"firstName\": \"Carl-Johan\", \"lastName\": \"Beurling\",\"mapString\": \"Mountain View, CA\", \"mediaURL\": \"https://udacity.com\",\"latitude\": 37.386052, \"longitude\": -122.083851}".data(using: String.Encoding.utf8)
-        let session = URLSession.shared
-        let task = session.dataTask(with: request as URLRequest) { data, response, error in
-            if error != nil { // Handle error…
-                return
-            }
-            print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
-        }
-        task.resume()
-    }
-    
- 
-    
     func setupTextField(_ Textfield: UITextField) {
         Textfield.font = UIFont(name: "HelveticaNeue-Thin", size: 24)
         Textfield.textColor = UIColor.lightGray
@@ -59,27 +38,54 @@ class AddPinViewController: UIViewController {
     }
     
     
-        
+    
     @IBAction func findOnTheMapButton(_ sender: Any) {
-        print("ada")
-        guard let locationText = LocationTextField!.text else {print("asdad"); return }
         
-        let AddPinMapVC = AddPinMapViewController()
-        AddPinMapVC.locationText = locationText
-        navigationController?.pushViewController(AddPinMapVC, animated: true)
-        //performSegue(withIdentifier: "lorteSegue", sender: self)
+        self.geocoder.geocodeAddressString(self.LocationTextField.text!) { (placemark, error) in
+            if error != nil { self.raiseError("Location Is Not Valid"); return }
+            self.checkLinkTextField(self.LinkTextField)
+            
+            guard let placemark = placemark?[0] else { return }
+            guard let mediaURL = self.LinkTextField.text else { return }
+            guard let locationText = self.LocationTextField.text else { return }
+            let latitude = placemark.location!.coordinate.latitude
+            let longitude = placemark.location!.coordinate.longitude
+            
+            
+            let AddPinMapVC = AddPinMapViewController(placemark, locationText, mediaURL, latitude, longitude)
+            
+            DispatchQueue.main.async {
+                self.navigationController?.pushViewController(AddPinMapVC, animated: true)
+            }
+        }
+        
     }
     
     
-    @IBAction func CreatePinButtonAction(_ sender: Any) {
-        print("adsa")
+    
+    func checkLinkTextField(_ textField: UITextField) {
+        if textField.text!.isEmpty { self.raiseError("A Link Should Be Entered") }
+            
+        else { if self.LinkTextField.text!.contains("https://") { } else {
+            self.raiseError("Link not safe (https://)") }
+        }
+    }
+    
+    
+    func raiseError(_ message: String) {
+        DispatchQueue.main.async {
+            let invalidLinkAlert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
+            invalidLinkAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            
+            self.present(invalidLinkAlert, animated: true, completion: nil)
+        }
     }
     
     
     @IBAction func CancelButton(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
-   
+    
     
     
 }

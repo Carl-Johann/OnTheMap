@@ -18,7 +18,7 @@ class UdacityClient : NSObject {
     
     
     
-    func getSessionID( completionHandlerForSessionID: @escaping (_ succes: Bool, _ error: String? ) -> Void) {
+    func getSessionID(_ username: String,_ password: String, completionHandlerForSessionID: @escaping (_ succes: Bool?, _ error: String? ) -> Void) {
 
         let request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
 
@@ -27,17 +27,18 @@ class UdacityClient : NSObject {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        request.httpBody = "{\"udacity\": {\"username\": \"carljohan.beurling@gmail.com\", \"password\": \"joeercool2\"}}".data(using: String.Encoding.utf8)
+        request.httpBody = "{\"udacity\": {\"username\": \"\(username)\", \"password\": \"\(password)\"}}".data(using: String.Encoding.utf8)
 
         
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
 
-            if error != nil { // Handle error…
+            if error != nil {
+                completionHandlerForSessionID(false, "Couldn't fetch sessionID")
                 return
             }
 
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
-                print("Your request returned a status code other than 2xx!")
+                completionHandlerForSessionID(false, "Your request returned a status code other than 2xx!")
                 return
             }
 
@@ -45,7 +46,6 @@ class UdacityClient : NSObject {
             let newData = data?.subdata(in: range) /* subset response data! */
 
             let parsedResult = try! JSONSerialization.jsonObject(with: newData!, options: .allowFragments) as AnyObject
-            print(parsedResult)
 
             if let session = parsedResult["session"] as? [String:AnyObject] { if let sessionID = session["id"] {
                     self.sessionID = sessionID as? String }
@@ -103,6 +103,31 @@ class UdacityClient : NSObject {
         task.resume()
         
     }
+    
+    func logout(completionHandlerForLogout: @escaping ( _ succes: Bool, _ error: String? ) -> Void) {
+        
+        let request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
+        request.httpMethod = "DELETE"
+        var xsrfCookie: HTTPCookie? = nil
+        let sharedCookieStorage = HTTPCookieStorage.shared
+        for cookie in sharedCookieStorage.cookies! {
+            if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
+        }
+        if let xsrfCookie = xsrfCookie {
+            request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
+        }
+        let session = URLSession.shared
+        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+            if error != nil {
+                completionHandlerForLogout(false, error as! String?)
+                return
+            }
+            completionHandlerForLogout(true, nil)
+        }
+        task.resume()
+    }
+    
+    
     
     
     class func sharedInstance() -> UdacityClient {

@@ -16,40 +16,41 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet var RefreshButtonOutlet: UIBarButtonItem!
     @IBOutlet var PinButtonOutlet: UIBarButtonItem!
     @IBOutlet var LogoutButtonOutlet: UIBarButtonItem!
-    @IBOutlet var ActivityIndicator: UIActivityIndicatorView!
+    var indicator = UIActivityIndicatorView()
     
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        ActivityIndicator.hidesWhenStopped = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        self.students = UdacityClient.sharedInstance().students
-
+        activityIndicator()
+        checkStudentForFirstName()
     }
+    
+    
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
         return self.students.count
-        
     }
     
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "PinDataCell")!
         let StudentAtRow = self.students[indexPath[1]]
         let picture = UIImage(named: "icon_pin")
         
-        
-        cell.textLabel?.text = ("\(StudentAtRow.firstName + " " + StudentAtRow.lastName)")
+        cell.textLabel?.text = ("\(StudentAtRow.firstName! + " " + StudentAtRow.lastName!)")
         cell.detailTextLabel?.text = StudentAtRow.mediaURl
         cell.imageView?.image = picture
-
+        
         return cell
     }
+    
     
     func isURlValid(_ url: String)-> Bool {
         let invalidLinkAlert = UIAlertController(title: "Error", message: "Invalid Link", preferredStyle: UIAlertControllerStyle.alert)
@@ -62,11 +63,11 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.present(invalidLinkAlert, animated: true, completion: nil)
         return false
     }
-
- 
+    
+    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
+        
         let StudentAtRow = self.students[indexPath[1]]
         
         if isURlValid(StudentAtRow.mediaURl!) {
@@ -74,56 +75,70 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             DispatchQueue.global(qos: .userInteractive).async {
                 
-             let urlRequest = URLRequest(url: mediaURl!)
+                let urlRequest = URLRequest(url: mediaURl!)
                 let webVC = self.storyboard?.instantiateViewController(withIdentifier: "WebViewController") as! WebViewController
                 webVC.urlRequest = urlRequest
                 
-                let webAuthNavigationController = UINavigationController()
-                webAuthNavigationController.pushViewController(webVC, animated: false)
+                let webAuthNC = UINavigationController()
+                webAuthNC.pushViewController(webVC, animated: false)
                 
-                DispatchQueue.main.async {
-                    self.present(webAuthNavigationController, animated: true, completion: nil)
-                
-                }
+                DispatchQueue.main.async { self.present(webAuthNC, animated: true, completion: nil) }
             }
             
         }
         
     }
     
-    func updateTable() {
     
-       /* UdacityClient.sharedInstance().getStudentData { (succes, errorString) in
-            if succes { self.students = UdacityClient.sharedInstance().students }
-        } */
-        
-    }
     
     
     @IBAction func LogoutbuttonAction(_ sender: Any) {
-        
-    }
-    
-    @IBAction func PinButtonAction(_ sender: Any) {
-    }
-    
-    @IBAction func RefreshButtonAction(_ sender: Any) {
+        indicator.startAnimating()
         DispatchQueue.global(qos: .userInitiated).async {
-            UdacityClient.sharedInstance().getStudentData { (succes, errorString) in
-                if succes { self.students = UdacityClient.sharedInstance().students }
+            UdacityClient.sharedInstance().logout { (succes, error) in
+                guard succes else { self.indicator.stopAnimating(); return }
+                
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true, completion: nil)
+                    self.indicator.stopAnimating()
+                }
+                
             }
         }
     }
     
-    func loading(_ IsLoading: Bool) {
-        switch IsLoading {
-        case true:
-            self.ActivityIndicator.startAnimating()
-            self.RefreshButtonOutlet.isEnabled = false
-        case false:
-            self.ActivityIndicator.stopAnimating()
-            self.RefreshButtonOutlet.isEnabled = true
+    
+    @IBAction func RefreshButton(_ sender: Any) {
+        indicator.startAnimating()
+        UdacityClient.sharedInstance().getStudentData { (succes, errorString) in
+            DispatchQueue.global(qos: .userInitiated).sync {
+                guard succes else { self.indicator.stopAnimating(); return }
+                
+                self.checkStudentForFirstName()
+                DispatchQueue.main.async {
+                    self.PinDataTableView.reloadData()
+                    self.indicator.stopAnimating()
+                }
+                
+            }
         }
     }
     
+    
+    
+    
+    func checkStudentForFirstName() {
+        for student in UdacityClient.sharedInstance().students {
+            if student.firstName!.isEmpty { }
+            else { students.append(student) }
+        }
+    }
+    
+    
+    func activityIndicator() {
+        indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+        indicator.center = self.view.center
+        indicator.hidesWhenStopped = true
+        self.view.addSubview(indicator)
+    }
 }

@@ -12,13 +12,13 @@ struct UdacityStudent {
     
     // MARK: Properties
     
-    var firstName: String = ""
-    var lastName: String = ""
+    var firstName: String? = ""
+    var lastName: String? = ""
     var latitude: Double? = 0.0
     var longitude: Double? = 0.0
     var mapString: String? = ""
     var mediaURl: String? = ""
-    var objectID: String = ""
+    var objectID: String? = ""
     
     
     // MARK: Initializers
@@ -26,26 +26,19 @@ struct UdacityStudent {
     // construct a TMDBMovie from a dictionary
      init(dictionary: [String:AnyObject]) {
         
-        firstName =  dictionary[UdacityClient.StudentLocationJSONResponseKeys.FirstName] as! String
-        lastName = dictionary[UdacityClient.StudentLocationJSONResponseKeys.LastName] as! String
+        if let firstName =  dictionary[UdacityClient.StudentLocationJSONResponseKeys.FirstName] as! String? { self.firstName = firstName }
         
-        if let latitude = dictionary[UdacityClient.StudentLocationJSONResponseKeys.Latitude] as! Double? {
-            self.latitude = latitude
-        }
+        if let lastName = dictionary[UdacityClient.StudentLocationJSONResponseKeys.LastName] as! String? { self.lastName = lastName}
         
-        if let longitude = dictionary[UdacityClient.StudentLocationJSONResponseKeys.Longitude] as! Double? {
-            self.longitude = longitude
-        }
+        if let latitude = dictionary[UdacityClient.StudentLocationJSONResponseKeys.Latitude] as! Double? { self.latitude = latitude }
         
-        objectID = dictionary[UdacityClient.StudentLocationJSONResponseKeys.ObjectId] as! String
+        if let longitude = dictionary[UdacityClient.StudentLocationJSONResponseKeys.Longitude] as! Double? { self.longitude = longitude }
         
-        if let mapString = dictionary[UdacityClient.StudentLocationJSONResponseKeys.MapString] as! String? {
-            self.mapString = mapString
-        }
+        if let objectID = dictionary[UdacityClient.StudentLocationJSONResponseKeys.ObjectId] as! String? { self.objectID = objectID }
         
-        if let mediaURl = dictionary[UdacityClient.StudentLocationJSONResponseKeys.MediaURL] as! String? {
-            self.mediaURl = mediaURl
-        }
+        if let mapString = dictionary[UdacityClient.StudentLocationJSONResponseKeys.MapString] as! String? { self.mapString = mapString }
+        
+        if let mediaURl = dictionary[UdacityClient.StudentLocationJSONResponseKeys.MediaURL] as! String? { self.mediaURl = mediaURl }
     
     }
     
