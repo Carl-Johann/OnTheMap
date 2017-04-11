@@ -9,14 +9,19 @@
 import UIKit
 import MapKit
 
-class AddPinViewController: UIViewController {
+class AddPinViewController: UIViewController, UITextFieldDelegate {
     
     
     @IBOutlet var LocationTextField: UITextField!
     @IBOutlet var LinkTextField: UITextField!
     @IBOutlet var FindOnTheMapButton: UIButton!
     
-    let geocoder = CLGeocoder()
+    
+    var geocoder = CLGeocoder()
+    var locationText: String = ""
+    var mediaURL: String = ""
+    var latitude: Double = 0.0
+    var longitude: Double = 0.0
     
     
     override func viewDidLoad() {
@@ -35,32 +40,49 @@ class AddPinViewController: UIViewController {
         Textfield.font = UIFont(name: "HelveticaNeue-Thin", size: 24)
         Textfield.textColor = UIColor.lightGray
         Textfield.textAlignment = .center
+        Textfield.delegate = self
+        
     }
     
     
     
     @IBAction func findOnTheMapButton(_ sender: Any) {
-        
-        self.geocoder.geocodeAddressString(self.LocationTextField.text!) { (placemark, error) in
-            if error != nil { self.raiseError("Location Is Not Valid"); return }
-            self.checkLinkTextField(self.LinkTextField)
-            
-            guard let placemark = placemark?[0] else { return }
-            guard let mediaURL = self.LinkTextField.text else { return }
-            guard let locationText = self.LocationTextField.text else { return }
-            let latitude = placemark.location!.coordinate.latitude
-            let longitude = placemark.location!.coordinate.longitude
+        DispatchQueue.main.async {
             
             
-            let AddPinMapVC = AddPinMapViewController(placemark, locationText, mediaURL, latitude, longitude)
-            
-            DispatchQueue.main.async {
-                self.navigationController?.pushViewController(AddPinMapVC, animated: true)
+            self.geocoder.geocodeAddressString(self.LocationTextField.text!) { (placemark, error) in
+                if error != nil { self.raiseError("Location Is Not Valid"); return }
+                self.checkLinkTextField(self.LinkTextField)
+                
+                guard let placemark = placemark?[0] else { return }
+                guard let mediaURL = self.LinkTextField.text else { return }
+                guard let locationText = self.LocationTextField.text else { return }
+                let latitude = placemark.location!.coordinate.latitude
+                let longitude = placemark.location!.coordinate.longitude
+                
+                self.mediaURL = mediaURL
+                self.locationText = locationText
+                self.latitude = latitude
+                self.longitude = longitude
+                
+                self.performSegue(withIdentifier: "AddPinSegue", sender: self)
+                
             }
         }
-        
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "AddPinSegue" {
+            let AddPinVC = segue.destination as! AddPinMapViewController
+            
+            AddPinVC.latitude = latitude
+            AddPinVC.longitude = longitude
+            AddPinVC.locationText = locationText
+            AddPinVC.mediaURL = mediaURL
+            
+        }
+    }
     
     
     func checkLinkTextField(_ textField: UITextField) {
@@ -86,7 +108,10 @@ class AddPinViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
     
 }
 

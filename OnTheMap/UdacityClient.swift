@@ -9,66 +9,72 @@
 import Foundation
 
 class UdacityClient : NSObject {
-
+    
     var session = URLSession.shared
     
     var students: [UdacityStudent] = [UdacityStudent]()
-    var sessionID: String? = nil
-    var accountKey: Int? = nil
+    var sessionID: String? = ""
+    var accountKey = 5608813109
     
     
     
     func getSessionID(_ username: String,_ password: String, completionHandlerForSessionID: @escaping (_ succes: Bool?, _ error: String? ) -> Void) {
-
+        
         let request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
-
+        
         request.httpMethod = "POST"
-
+        
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-
+        
         request.httpBody = "{\"udacity\": {\"username\": \"\(username)\", \"password\": \"\(password)\"}}".data(using: String.Encoding.utf8)
-
+        
         
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
-
+            
             if error != nil {
                 completionHandlerForSessionID(false, "Couldn't fetch sessionID")
                 return
             }
-
+            
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
                 completionHandlerForSessionID(false, "Your request returned a status code other than 2xx!")
                 return
             }
-
+            
             let range = Range(5 ..< data!.count)
             let newData = data?.subdata(in: range) /* subset response data! */
-
+            
             let parsedResult = try! JSONSerialization.jsonObject(with: newData!, options: .allowFragments) as AnyObject
-
-            if let session = parsedResult["session"] as? [String:AnyObject] { if let sessionID = session["id"] {
-                    self.sessionID = sessionID as? String }
-            } else {
-                completionHandlerForSessionID(false, "There was an error with getting the sessionID from Udacity's servers")
-            }
+            
+            guard let session = parsedResult["session"] as? [String:AnyObject] else { completionHandlerForSessionID(false, "Couldn't find the 'session' "); return }
+            
+            guard let sessionID = session["id"] else { print("adad"); return }
+            self.sessionID = sessionID as? String
             
             
-            if let account = parsedResult["account"] as? [String:AnyObject] {
-                if let uniqueKey = account["key"] as? Int {
-                    self.accountKey = uniqueKey
-                }
-            } else {
-                completionHandlerForSessionID(false, "Couldn't find an account ID")
-            }
+            
+            
+            guard let account = parsedResult["account"] as? [String:AnyObject] else { completionHandlerForSessionID(false, "Couldn't find any account data"); return }
+            
+            print("account: \(account)")
+            
+            /*guard let uniqueKey = account["key"] else { completionHandlerForSessionID(false, "Couldn't find an account accountKey"); return }
+            
+            print("uniqueKey: \(uniqueKey)")
+            //self.accountKey = uniqueKey as! Int*/
+            
+            
+            
+            
             
             completionHandlerForSessionID(true, nil)
         }
-
+        
         task.resume()
-
+        
     }
-
+    
     func getStudentData(completionHandlerForStudentData: @escaping ( _ succes: Bool, _ error: String? ) -> Void) {
         
         
@@ -136,5 +142,5 @@ class UdacityClient : NSObject {
         }
         return Singleton.sharedInstance
     }
-
+    
 }

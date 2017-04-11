@@ -23,14 +23,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.ActivityIndicator.hidesWhenStopped = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
         setupMap { (succes, errorString) in
-            if let errorString = errorString { print(errorString) }
+           if let errorsString = errorString  { print(errorString!) }
         }
         
     }

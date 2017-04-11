@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet var udacityLogo: UIImageView!
     @IBOutlet var emailLoginTextField: UITextField!
@@ -36,6 +36,8 @@ class LoginViewController: UIViewController {
         textfield.layer.borderColor = UIColor.gray.cgColor
         textfield.layer.borderWidth = 1.5
         textfield.layer.cornerRadius = 5
+        textfield.delegate = self
+        
     }
     
     
@@ -48,6 +50,7 @@ class LoginViewController: UIViewController {
             DispatchQueue.main.async {
                 guard error == nil else {self.loading(false)
                     self.raiseError("Invalid Password or Username")
+                    print(error)
                     return
                 }
                 
@@ -100,6 +103,11 @@ class LoginViewController: UIViewController {
             loadingDot.stopAnimating()
             loginButtonOutlet.isHidden = false
         }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
     

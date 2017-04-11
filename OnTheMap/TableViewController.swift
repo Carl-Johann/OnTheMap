@@ -27,7 +27,9 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         activityIndicator()
-        checkStudentForFirstName()
+        checkStudentForFirstName { (succes, error) in
+            print("succes: \(succes)")
+        }
     }
     
     
@@ -110,28 +112,40 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBAction func RefreshButton(_ sender: Any) {
         indicator.startAnimating()
-        UdacityClient.sharedInstance().getStudentData { (succes, errorString) in
-            DispatchQueue.global(qos: .userInitiated).sync {
-                guard succes else { self.indicator.stopAnimating(); return }
-                
-                self.checkStudentForFirstName()
+        print("1")
+        
+        print("2")
+        
+        
+        
+        UdacityClient.sharedInstance().getStudentData(completionHandlerForStudentData: { (succes, errorString) in
+            print("2.2")
+            self.checkStudentForFirstName(completionHandlerForStudentsFirstName: { (succes, error) in
+                guard error == nil else { print("lort"); return }
+                print("2.3")
                 DispatchQueue.main.async {
                     self.PinDataTableView.reloadData()
+                    print("2.4")
                     self.indicator.stopAnimating()
                 }
-                
-            }
-        }
+            })
+        })
+        
+        print("4")
+        
+        
     }
     
     
     
     
-    func checkStudentForFirstName() {
+    func checkStudentForFirstName(completionHandlerForStudentsFirstName: @escaping ( _ succes: Bool, _ error: String? ) -> Void) {
+        
         for student in UdacityClient.sharedInstance().students {
             if student.firstName!.isEmpty { }
             else { students.append(student) }
         }
+        completionHandlerForStudentsFirstName(true, nil)
     }
     
     
