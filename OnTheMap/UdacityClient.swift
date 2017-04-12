@@ -171,7 +171,7 @@ class UdacityClient : NSObject, UIAlertViewDelegate {
             let range = Range(uncheckedBounds: (5, data!.count - 5))
             let newData = data?.subdata(in: range) /* subset response data! */
             
-            let parsedResult = try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as AnyObject
+            let parsedResult = try! JSONSerialization.jsonObject(with: newData!, options: .allowFragments) as AnyObject
             
             //print(NSString(data: newData!, encoding: String.Encoding.utf8.rawValue)!)
             
