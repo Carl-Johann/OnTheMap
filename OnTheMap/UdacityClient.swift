@@ -166,10 +166,12 @@ class UdacityClient : NSObject, UIAlertViewDelegate {
             if error != nil { // Handle error...
                 return
             }
+            
+            
             let range = Range(uncheckedBounds: (5, data!.count - 5))
             let newData = data?.subdata(in: range) /* subset response data! */
             
-            let JSON = try! JSONSerialization.jsonObject(with: newData!, options: .allowFragments)
+            let parsedResult = try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as AnyObject
             
             //print(NSString(data: newData!, encoding: String.Encoding.utf8.rawValue)!)
             
