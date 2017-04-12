@@ -26,19 +26,19 @@ struct UdacityStudent {
     // construct a TMDBMovie from a dictionary
      init(dictionary: [String:AnyObject]) {
         
-        if let firstName =  dictionary[UdacityClient.StudentLocationJSONResponseKeys.FirstName] as! String? { self.firstName = firstName }
+        if let firstName =  dictionary[UdacityClient.StudentLocationJSONResponseKeys.FirstName] as? String { self.firstName = firstName }
         
-        if let lastName = dictionary[UdacityClient.StudentLocationJSONResponseKeys.LastName] as! String? { self.lastName = lastName}
+        if let lastName = dictionary[UdacityClient.StudentLocationJSONResponseKeys.LastName] as? String { self.lastName = lastName}
         
-        if let latitude = dictionary[UdacityClient.StudentLocationJSONResponseKeys.Latitude] as! Double? { self.latitude = latitude }
+        if let latitude = dictionary[UdacityClient.StudentLocationJSONResponseKeys.Latitude] as? Double { self.latitude = latitude }
         
-        if let longitude = dictionary[UdacityClient.StudentLocationJSONResponseKeys.Longitude] as! Double? { self.longitude = longitude }
+        if let longitude = dictionary[UdacityClient.StudentLocationJSONResponseKeys.Longitude] as? Double { self.longitude = longitude }
         
-        if let objectID = dictionary[UdacityClient.StudentLocationJSONResponseKeys.ObjectId] as! String? { self.objectID = objectID }
+        if let objectID = dictionary[UdacityClient.StudentLocationJSONResponseKeys.ObjectId] as? String { self.objectID = objectID }
         
-        if let mapString = dictionary[UdacityClient.StudentLocationJSONResponseKeys.MapString] as! String? { self.mapString = mapString }
+        if let mapString = dictionary[UdacityClient.StudentLocationJSONResponseKeys.MapString] as? String { self.mapString = mapString }
         
-        if let mediaURl = dictionary[UdacityClient.StudentLocationJSONResponseKeys.MediaURL] as! String? { self.mediaURl = mediaURl }
+        if let mediaURl = dictionary[UdacityClient.StudentLocationJSONResponseKeys.MediaURL] as? String { self.mediaURl = mediaURl }
     
     }
     

@@ -12,10 +12,10 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     var students: [UdacityStudent] = [UdacityStudent]()
     
-    @IBOutlet var PinDataTableView: UITableView!
-    @IBOutlet var RefreshButtonOutlet: UIBarButtonItem!
-    @IBOutlet var PinButtonOutlet: UIBarButtonItem!
-    @IBOutlet var LogoutButtonOutlet: UIBarButtonItem!
+    @IBOutlet var pinDataTableView: UITableView!
+    @IBOutlet var refreshButtonOutlet: UIBarButtonItem!
+    @IBOutlet var addPinButtonOutlet: UIBarButtonItem!
+    @IBOutlet var logoutButtonOutlet: UIBarButtonItem!
     var indicator = UIActivityIndicatorView()
     
     
@@ -55,14 +55,9 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     
     func isURlValid(_ url: String)-> Bool {
-        let invalidLinkAlert = UIAlertController(title: "Error", message: "Invalid Link", preferredStyle: UIAlertControllerStyle.alert)
-        invalidLinkAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        if url.contains("https://") { return true }
         
-        if url.contains("https://") {
-            return true
-        }
-        
-        self.present(invalidLinkAlert, animated: true, completion: nil)
+        presentError("URL is not valid")
         return false
     }
     
@@ -94,10 +89,10 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     
     
-    @IBAction func LogoutbuttonAction(_ sender: Any) {
+    @IBAction func logoutbuttonAction(_ sender: Any) {
         indicator.startAnimating()
         DispatchQueue.global(qos: .userInitiated).async {
-            UdacityClient.sharedInstance().logout { (succes, error) in
+            UdacityClient.sharedInstance.logout { (succes, error) in
                 guard succes else { self.indicator.stopAnimating(); return }
                 
                 DispatchQueue.main.async {
@@ -110,41 +105,37 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     
-    @IBAction func RefreshButton(_ sender: Any) {
+    @IBAction func refreshButton(_ sender: Any) {
         indicator.startAnimating()
-        print("1")
+    
         
-        print("2")
-        
-        
-        
-        UdacityClient.sharedInstance().getStudentData(completionHandlerForStudentData: { (succes, errorString) in
-            print("2.2")
+        UdacityClient.sharedInstance.getStudentData(completionHandlerForStudentData: { (succes, errorString) in
             self.checkStudentForFirstName(completionHandlerForStudentsFirstName: { (succes, error) in
                 guard error == nil else { print("lort"); return }
-                print("2.3")
                 DispatchQueue.main.async {
-                    self.PinDataTableView.reloadData()
-                    print("2.4")
+                    self.pinDataTableView.reloadData()
+                    
                     self.indicator.stopAnimating()
                 }
             })
         })
-        
-        print("4")
-        
-        
     }
     
     
     
     
     func checkStudentForFirstName(completionHandlerForStudentsFirstName: @escaping ( _ succes: Bool, _ error: String? ) -> Void) {
+        //UdacityClient.sharedInstance.students.removeAll()
+        UdacityStudentsData.sharedInstance.students.removeAll()
         
-        for student in UdacityClient.sharedInstance().students {
+        //for student in UdacityClient.sharedInstance.students {
+        for student in UdacityStudentsData.sharedInstance.students {
+            
             if student.firstName!.isEmpty { }
             else { students.append(student) }
+            
         }
+        
         completionHandlerForStudentsFirstName(true, nil)
     }
     
@@ -154,5 +145,9 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         indicator.center = self.view.center
         indicator.hidesWhenStopped = true
         self.view.addSubview(indicator)
+    }
+    
+    func presentError(_ message: String, _ title: String = "Error", _ actionTitle: String = "OK") {
+        self.present(UdacityClient.sharedInstance.raiseError(message, title, actionTitle), animated: true, completion: nil)
     }
 }

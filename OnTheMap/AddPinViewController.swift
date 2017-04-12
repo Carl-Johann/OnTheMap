@@ -12,9 +12,9 @@ import MapKit
 class AddPinViewController: UIViewController, UITextFieldDelegate {
     
     
-    @IBOutlet var LocationTextField: UITextField!
-    @IBOutlet var LinkTextField: UITextField!
-    @IBOutlet var FindOnTheMapButton: UIButton!
+    @IBOutlet var locationTextField: UITextField!
+    @IBOutlet var linkTextField: UITextField!
+    @IBOutlet var findOnTheMapButton: UIButton!
     
     
     var geocoder = CLGeocoder()
@@ -30,8 +30,8 @@ class AddPinViewController: UIViewController, UITextFieldDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        setupTextField(LocationTextField)
-        setupTextField(LinkTextField)
+        setupTextField(locationTextField)
+        setupTextField(linkTextField)
         
     }
     
@@ -50,13 +50,13 @@ class AddPinViewController: UIViewController, UITextFieldDelegate {
         DispatchQueue.main.async {
             
             
-            self.geocoder.geocodeAddressString(self.LocationTextField.text!) { (placemark, error) in
+            self.geocoder.geocodeAddressString(self.locationTextField.text!) { (placemark, error) in
                 if error != nil { self.raiseError("Location Is Not Valid"); return }
-                self.checkLinkTextField(self.LinkTextField)
+                self.checkLinkTextField(self.linkTextField)
                 
                 guard let placemark = placemark?[0] else { return }
-                guard let mediaURL = self.LinkTextField.text else { return }
-                guard let locationText = self.LocationTextField.text else { return }
+                guard let mediaURL = self.linkTextField.text else { return }
+                guard let locationText = self.locationTextField.text else { return }
                 let latitude = placemark.location!.coordinate.latitude
                 let longitude = placemark.location!.coordinate.longitude
                 
@@ -88,7 +88,7 @@ class AddPinViewController: UIViewController, UITextFieldDelegate {
     func checkLinkTextField(_ textField: UITextField) {
         if textField.text!.isEmpty { self.raiseError("A Link Should Be Entered") }
             
-        else { if self.LinkTextField.text!.contains("https://") { } else {
+        else { if self.linkTextField.text!.contains("https://") { } else {
             self.raiseError("Link not safe (https://)") }
         }
     }
@@ -104,7 +104,7 @@ class AddPinViewController: UIViewController, UITextFieldDelegate {
     }
     
     
-    @IBAction func CancelButton(_ sender: Any) {
+    @IBAction func cancelButton(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
     

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="HsS-oi-24H">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -84,7 +84,7 @@
                                     </attributedString>
                                 </state>
                                 <connections>
-                                    <action selector="SignUpButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="bF2-Tc-ORJ"/>
+                                    <action selector="signUpButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6GT-wP-3tb"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -168,7 +168,7 @@
                                             </attributedString>
                                         </state>
                                         <connections>
-                                            <action selector="findOnTheMapButton:" destination="l50-RT-p0N" eventType="touchUpInside" id="npS-0q-VhU"/>
+                                            <action selector="findOnTheMapButton:" destination="l50-RT-p0N" eventType="touchUpInside" id="oyI-oR-icb"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -282,14 +282,14 @@
                         <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="fa5-p4-pmO">
                             <color key="tintColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
-                                <action selector="CancelButton:" destination="l50-RT-p0N" id="ClT-8j-rF3"/>
+                                <action selector="cancelButton:" destination="l50-RT-p0N" id="aHn-vo-EVo"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="FindOnTheMapButton" destination="B2k-sg-bh3" id="mUq-PT-LLB"/>
-                        <outlet property="LinkTextField" destination="QRx-b9-B4L" id="qLF-RI-YoW"/>
-                        <outlet property="LocationTextField" destination="mkB-fJ-1xO" id="abO-vS-6c5"/>
+                        <outlet property="findOnTheMapButton" destination="B2k-sg-bh3" id="gwZ-jb-C2w"/>
+                        <outlet property="linkTextField" destination="QRx-b9-B4L" id="xse-lY-8XT"/>
+                        <outlet property="locationTextField" destination="mkB-fJ-1xO" id="SIj-Ik-kOb"/>
                         <segue destination="IWX-KM-WUf" kind="show" identifier="AddPinSegue" id="CVK-tD-fVl"/>
                     </connections>
                 </viewController>
@@ -330,23 +330,29 @@
                                     </attributedString>
                                 </state>
                                 <connections>
-                                    <action selector="CreatePinButtonAction:" destination="IWX-KM-WUf" eventType="touchUpInside" id="Njw-cM-e58"/>
+                                    <action selector="createPinButtonAction:" destination="IWX-KM-WUf" eventType="touchUpInside" id="2sv-II-nZ9"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="PFF-du-yBW">
+                                <rect key="frame" x="197" y="358" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="ENR-Wy-wGP" firstAttribute="leading" secondItem="CwC-3m-deO" secondAttribute="leadingMargin" constant="87" id="9AE-RM-Vrd"/>
                             <constraint firstAttribute="trailingMargin" secondItem="ENR-Wy-wGP" secondAttribute="trailing" constant="87" id="Adq-ig-jdk"/>
                             <constraint firstItem="LDR-bp-Zeg" firstAttribute="width" secondItem="CwC-3m-deO" secondAttribute="width" id="F3b-Ee-soq"/>
+                            <constraint firstItem="PFF-du-yBW" firstAttribute="centerX" secondItem="CwC-3m-deO" secondAttribute="centerX" id="H2t-No-4rn"/>
                             <constraint firstItem="XS2-Xn-8eD" firstAttribute="top" secondItem="ENR-Wy-wGP" secondAttribute="bottom" constant="62" id="QJ9-MK-gSp"/>
                             <constraint firstItem="LDR-bp-Zeg" firstAttribute="centerX" secondItem="CwC-3m-deO" secondAttribute="centerX" id="R4a-Ty-Oqr"/>
+                            <constraint firstItem="PFF-du-yBW" firstAttribute="centerY" secondItem="CwC-3m-deO" secondAttribute="centerY" id="W0N-A8-Llp"/>
                             <constraint firstItem="LDR-bp-Zeg" firstAttribute="height" secondItem="CwC-3m-deO" secondAttribute="height" id="dWq-0o-Fpg"/>
                             <constraint firstItem="LDR-bp-Zeg" firstAttribute="centerY" secondItem="CwC-3m-deO" secondAttribute="centerY" id="o6E-TP-tWu"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="MapView" destination="LDR-bp-Zeg" id="OX3-sf-PLV"/>
+                        <outlet property="activityIndicator" destination="PFF-du-yBW" id="SyR-Lh-z6r"/>
+                        <outlet property="mapView" destination="LDR-bp-Zeg" id="ndQ-0i-gdf"/>
                         <segue destination="HsS-oi-24H" kind="showDetail" identifier="CreatedPinSegue" action="showViewController:sender:" id="ak4-M8-rGE"/>
                     </connections>
                 </viewController>
@@ -437,7 +443,7 @@
                     <navigationItem key="navigationItem" title="On The Map" id="OBM-2S-9Kv">
                         <barButtonItem key="leftBarButtonItem" title="Logout" id="hm2-lY-zbZ">
                             <connections>
-                                <action selector="LogoutbuttonAction:" destination="2si-wa-ldJ" id="Yvh-S6-qtk"/>
+                                <action selector="logoutbuttonAction:" destination="2si-wa-ldJ" id="Hwd-UK-ZcY"/>
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
@@ -448,16 +454,16 @@
                             </barButtonItem>
                             <barButtonItem image="icon_refresh" id="h2I-RD-VSb">
                                 <connections>
-                                    <action selector="RefreshButton:" destination="2si-wa-ldJ" id="hJC-nj-UV4"/>
+                                    <action selector="refreshButton:" destination="2si-wa-ldJ" id="3n6-Nn-W7R"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
-                        <outlet property="LogoutButtonOutlet" destination="hm2-lY-zbZ" id="UCx-SU-Zne"/>
-                        <outlet property="PinButtonOutlet" destination="gpK-lN-CUI" id="dni-nG-PRu"/>
-                        <outlet property="PinDataTableView" destination="7mx-qZ-NQZ" id="oBa-aV-QLB"/>
-                        <outlet property="RefreshButtonOutlet" destination="h2I-RD-VSb" id="5pi-Wa-VW3"/>
+                        <outlet property="addPinButtonOutlet" destination="gpK-lN-CUI" id="R3A-dl-ZMI"/>
+                        <outlet property="logoutButtonOutlet" destination="hm2-lY-zbZ" id="H8x-sg-xY9"/>
+                        <outlet property="pinDataTableView" destination="7mx-qZ-NQZ" id="Vw2-7N-BxU"/>
+                        <outlet property="refreshButtonOutlet" destination="h2I-RD-VSb" id="Tfg-Qp-YQy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Sg-f2-kC3" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -541,29 +547,29 @@
                     <navigationItem key="navigationItem" title="On The Map" id="juz-LL-lsb">
                         <barButtonItem key="leftBarButtonItem" title="Logout" id="Lvf-Mx-bQ4">
                             <connections>
-                                <action selector="LogoutButtonAction:" destination="cxC-rL-P6N" id="NYo-cc-Ul2"/>
+                                <action selector="logoutButtonAction:" destination="cxC-rL-P6N" id="Ngo-gd-KgI"/>
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
-                            <barButtonItem image="icon_addpin" id="h4Z-mz-RJS" userLabel="I">
+                            <barButtonItem image="icon_addpin" id="h4Z-mz-RJS">
                                 <connections>
                                     <segue destination="Yp2-jb-eX3" kind="presentation" id="7ma-Y0-ADi"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem image="icon_refresh" id="TPo-Jm-ps6">
                                 <connections>
-                                    <action selector="RefreshButton:" destination="cxC-rL-P6N" id="Dvh-gt-EZp"/>
+                                    <action selector="refreshButton:" destination="cxC-rL-P6N" id="rpG-Ar-JuE"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
-                        <outlet property="ActivityIndicator" destination="x6f-rO-d6a" id="Si2-iV-Z7o"/>
-                        <outlet property="BlackLoadingScreen" destination="0SB-EG-aau" id="sqD-T2-LQG"/>
-                        <outlet property="LogoutButtonOutlet" destination="Lvf-Mx-bQ4" id="U7K-fT-G9f"/>
-                        <outlet property="MapView" destination="oGg-Id-Q6f" id="dPY-t5-bbl"/>
-                        <outlet property="PinButton" destination="h4Z-mz-RJS" id="iCp-jN-geh"/>
-                        <outlet property="RefreshButton" destination="TPo-Jm-ps6" id="3t4-bp-sWy"/>
+                        <outlet property="activityIndicator" destination="x6f-rO-d6a" id="z4s-Ce-odS"/>
+                        <outlet property="blackLoadingScreen" destination="0SB-EG-aau" id="L8B-7e-EaW"/>
+                        <outlet property="logoutButtonOutlet" destination="Lvf-Mx-bQ4" id="v9X-dE-e1r"/>
+                        <outlet property="mapView" destination="oGg-Id-Q6f" id="d2s-8c-8rp"/>
+                        <outlet property="pinButton" destination="h4Z-mz-RJS" id="JMo-eA-qim"/>
+                        <outlet property="refreshButton" destination="TPo-Jm-ps6" id="7k9-ZX-7dB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wdU-DB-McE" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -616,6 +622,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="7ma-Y0-ADi"/>
-        <segue reference="ak4-M8-rGE"/>
+        <segue reference="8HR-Gk-7NE"/>
     </inferredMetricsTieBreakers>
 </document>

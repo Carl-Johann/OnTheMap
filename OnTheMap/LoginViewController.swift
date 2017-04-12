@@ -29,16 +29,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
     }
     
-    func setupTextField(_ textfield: UITextField) {
-        textfield.font = UIFont(name: "HelveticaNeue-Thin", size: 24)
-        textfield.textColor = UIColor.black.withAlphaComponent(0.8)
-        textfield.textAlignment = .left
-        textfield.layer.borderColor = UIColor.gray.cgColor
-        textfield.layer.borderWidth = 1.5
-        textfield.layer.cornerRadius = 5
-        textfield.delegate = self
-        
-    }
     
     
     @IBAction func loginButton(_ sender: UIButton) {
@@ -46,11 +36,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         guard let username = emailLoginTextField.text else { return }
         guard let password = passwordLoginTextField.text else { return }
         
-        UdacityClient.sharedInstance().getSessionID(username, password) { (succes, error) in
+        UdacityClient.sharedInstance.getSessionID(username, password) { (succes, error) in
             DispatchQueue.main.async {
-                guard error == nil else {self.loading(false)
-                    self.raiseError("Invalid Password or Username")
-                    print(error)
+                guard error == nil else {
+                    self.loading(false)
+                    self.presentError(error!, "Error", "Try Agian")
                     return
                 }
                 
@@ -61,7 +51,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    @IBAction func SignUpButton(_ sender: Any) {
+    @IBAction func signUpButton(_ sender: Any) {
         let url = URL(string: "https://www.udacity.com/account/auth#!/signup")
         
         let MapVC = self.storyboard?.instantiateViewController(withIdentifier: "WebViewController") as! WebViewController
@@ -74,21 +64,15 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             self.present(webAuthNavigationController, animated: true, completion: nil)
         }
     }
-    
-    func raiseError(_ message: String) {
-        
-        DispatchQueue.main.async {
-            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-            
-            self.present(alert, animated: true, completion: nil)
-        }
-    }
+
     
     
     func areTextFieldsEmpty()-> Bool {
-        if (emailLoginTextField.text?.isEmpty)! || (passwordLoginTextField.text?.isEmpty)! { raiseError("Enter a password and email"); return false }
-        
+        if (emailLoginTextField.text?.isEmpty)! || (passwordLoginTextField.text?.isEmpty)! {
+            self.presentError("Enter a password and email")
+            return false
+        }
+    
         loading(true)
         return true
     }
@@ -110,6 +94,20 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
+    func setupTextField(_ textfield: UITextField) {
+        textfield.font = UIFont(name: "HelveticaNeue-Thin", size: 24)
+        textfield.textColor = UIColor.black.withAlphaComponent(0.8)
+        textfield.textAlignment = .left
+        textfield.layer.borderColor = UIColor.gray.cgColor
+        textfield.layer.borderWidth = 1.5
+        textfield.layer.cornerRadius = 5
+        textfield.delegate = self
+        
+    }
+    
+    func presentError(_ message: String, _ title: String = "Error", _ actionTitle: String = "OK") {
+        self.present(UdacityClient.sharedInstance.raiseError(message, title, actionTitle), animated: true, completion: nil)
+    }
     
 }
 

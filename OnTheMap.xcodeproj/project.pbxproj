@@ -19,6 +19,7 @@
 		238AC9511E8D66F900DBCF16 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 238AC94F1E8D66F900DBCF16 /* Main.storyboard */; };
 		238AC9531E8D66F900DBCF16 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 238AC9521E8D66F900DBCF16 /* Assets.xcassets */; };
 		238AC9561E8D66F900DBCF16 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 238AC9541E8D66F900DBCF16 /* LaunchScreen.storyboard */; };
+		2395607E1E9E614A00DA28E6 /* UdacityStudentsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2395607D1E9E614A00DA28E6 /* UdacityStudentsData.swift */; };
 		23A8AC0E1E993A95004E7C8E /* AddPinMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A8AC0D1E993A95004E7C8E /* AddPinMapViewController.swift */; };
 		23D949731E8EE8E400B59865 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D949721E8EE8E400B59865 /* WebViewController.swift */; };
 /* End PBXBuildFile section */
@@ -38,6 +39,7 @@
 		238AC9521E8D66F900DBCF16 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		238AC9551E8D66F900DBCF16 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		238AC9571E8D66F900DBCF16 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2395607D1E9E614A00DA28E6 /* UdacityStudentsData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityStudentsData.swift; sourceTree = "<group>"; };
 		23A8AC0D1E993A95004E7C8E /* AddPinMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddPinMapViewController.swift; sourceTree = "<group>"; };
 		23D949721E8EE8E400B59865 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -81,6 +83,7 @@
 				232226001E8D890500F62464 /* UdacityClient.swift */,
 				232226081E8D8AB500F62464 /* UdacityConstants.swift */,
 				232AC78D1E8E482B00A97A33 /* UdacityStudent.swift */,
+				2395607D1E9E614A00DA28E6 /* UdacityStudentsData.swift */,
 			);
 			name = Udacity;
 			sourceTree = "<group>";
@@ -207,6 +210,7 @@
 				232AC78E1E8E482B00A97A33 /* UdacityStudent.swift in Sources */,
 				232AC7901E8E826F00A97A33 /* TableViewController.swift in Sources */,
 				232226091E8D8AB500F62464 /* UdacityConstants.swift in Sources */,
+				2395607E1E9E614A00DA28E6 /* UdacityStudentsData.swift in Sources */,
 				232226011E8D890500F62464 /* UdacityClient.swift in Sources */,
 				232D8A771E93F17E0065C675 /* RoundedButton.swift in Sources */,
 				23A8AC0E1E993A95004E7C8E /* AddPinMapViewController.swift in Sources */,

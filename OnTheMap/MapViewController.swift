@@ -12,32 +12,33 @@ import UIKit
 class MapViewController: UIViewController, MKMapViewDelegate {
     
     var students: [UdacityStudent] = [UdacityStudent]()
-    var annotations: [MKPointAnnotation] = []
+    var studentAnnotations: [MKPointAnnotation] = []
     
-    @IBOutlet var PinButton: UIBarButtonItem!
-    @IBOutlet var RefreshButton: UIBarButtonItem!
-    @IBOutlet var MapView: MKMapView!
-    @IBOutlet var LogoutButtonOutlet: UIBarButtonItem!
-    @IBOutlet var BlackLoadingScreen: UIView!
-    @IBOutlet var ActivityIndicator: UIActivityIndicatorView!
+    @IBOutlet var pinButton: UIBarButtonItem!
+    @IBOutlet var refreshButton: UIBarButtonItem!
+    @IBOutlet var mapView: MKMapView!
+    @IBOutlet var logoutButtonOutlet: UIBarButtonItem!
+    @IBOutlet var blackLoadingScreen: UIView!
+    @IBOutlet var activityIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        UdacityClient.sharedInstance.getLoggedInUserData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
         setupMap { (succes, errorString) in
-           if let errorsString = errorString  { print(errorString!) }
+            if succes == false { self.presentError("An error occured"); return }
         }
         
     }
     
-    @IBAction func LogoutButtonAction(_ sender: Any) {
+    @IBAction func logoutButtonAction(_ sender: Any) {
         loading(true)
         DispatchQueue.global(qos: .userInitiated).async {
-            UdacityClient.sharedInstance().logout { (succes, error) in
+            UdacityClient.sharedInstance.logout { (succes, error) in
                 if succes { DispatchQueue.main.async {
                     self.dismiss(animated: true, completion: nil) }
                     self.loading(false)
@@ -49,11 +50,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     
-    @IBAction func RefreshButton(_ sender: Any) {
+    @IBAction func refreshButton(_ sender: Any) {
         loading(true)
         self.setupMap { (succes, errorString) in
             self.loading(false) }
-    }    
+    }
     
     
     func isURlValid(_ url: String)-> Bool {
@@ -70,13 +71,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     func setupMap(completionHandlerForSetupMap: @escaping (_ succes: Bool, _ errorString: String?) -> Void ) {
-        self.annotations.removeAll()
+        self.studentAnnotations.removeAll()
         
-        UdacityClient.sharedInstance().getStudentData { (succes, errorString) in
+        UdacityClient.sharedInstance.getStudentData { (succes, errorString) in
             DispatchQueue.main.async {
                 
                 if succes {
-                    self.students = UdacityClient.sharedInstance().students
+                    //self.students = UdacityClient.sharedInstance.students
+                    self.students = UdacityStudentsData.sharedInstance.students
                     self.setupAnootations()
                     completionHandlerForSetupMap(true, nil)
                 } else {
@@ -91,6 +93,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     func setupAnootations() {
+        self.mapView.removeAnnotations(studentAnnotations)
         
         for student in self.students {
             
@@ -107,10 +110,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             annotation.subtitle = student.mediaURl!
             
             
-            self.annotations.append(annotation)
+            self.studentAnnotations.append(annotation)
         }
-        self.MapView.addAnnotations(self.annotations)
-
+        self.mapView.addAnnotations(self.studentAnnotations)
+        
     }
     
     
@@ -135,34 +138,36 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-
-        if control == view.rightCalloutAccessoryView {
+        
+        guard control == view.rightCalloutAccessoryView else { return }
+        
+        guard let urlString = view.annotation?.subtitle! else { return }
+        
+        guard isURlValid(urlString) else { return }
+        
+        guard let mediaURl = URL(string: urlString) else { return }
+        
+        DispatchQueue.global(qos: .userInteractive).async {
             
-            if let urlString = view.annotation?.subtitle! {
-                
-                if isURlValid(urlString) {
-                    let mediaURl = URL(string: urlString)
-                    
-                    DispatchQueue.global(qos: .userInteractive).async {
-                        
-                        let urlRequest = URLRequest(url: mediaURl!)
-                        let MapVC = self.storyboard?.instantiateViewController(withIdentifier: "WebViewController") as! WebViewController
-                        MapVC.urlRequest = urlRequest
-                        
-                        let webAuthNavigationController = UINavigationController()
-                        webAuthNavigationController.pushViewController(MapVC, animated: false)
-                        
-                        DispatchQueue.main.async {
-                            self.present(webAuthNavigationController, animated: true, completion: nil)
-                            
-                        }
-                    
-                    }
-                
-                }
+            /*let urlRequest = URLRequest(url: mediaURl!)
+             let MapVC = self.storyboard?.instantiateViewController(withIdentifier: "WebViewController") as! WebViewController
+             MapVC.urlRequest = urlRequest
+             
+             let webAuthNavigationController = UINavigationController()
+             webAuthNavigationController.pushViewController(MapVC, animated: false)*/
             
+            DispatchQueue.main.async {
+                //self.present(webAuthNavigationController, animated: true, completion: nil)
+                UIApplication.shared.open(mediaURl, options: [:])
+                
             }
+            
         }
+        
+        
+        
+        
+        
         
     }
     
@@ -170,16 +175,19 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     func loading(_ isLoading: Bool) {
         switch isLoading {
         case true:
-            self.MapView.alpha = 0.4
-            self.ActivityIndicator.startAnimating()
-            self.RefreshButton.isEnabled = false
+            self.mapView.alpha = 0.4
+            self.activityIndicator.startAnimating()
+            self.refreshButton.isEnabled = false
         case false:
-            self.MapView.alpha = 1
-            self.ActivityIndicator.stopAnimating()
-            self.RefreshButton.isEnabled = true
+            self.mapView.alpha = 1
+            self.activityIndicator.stopAnimating()
+            self.refreshButton.isEnabled = true
         }
     }
-
+    
+    func presentError(_ message: String, _ title: String = "Error", _ actionTitle: String = "OK") {
+        self.present(UdacityClient.sharedInstance.raiseError(message, title, actionTitle), animated: true, completion: nil)
+    }
     
 }
 
