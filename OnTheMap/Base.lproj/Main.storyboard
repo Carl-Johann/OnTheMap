@@ -333,7 +333,7 @@
                                     <action selector="createPinButtonAction:" destination="IWX-KM-WUf" eventType="touchUpInside" id="2sv-II-nZ9"/>
                                 </connections>
                             </button>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="PFF-du-yBW">
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="PFF-du-yBW">
                                 <rect key="frame" x="197" y="358" width="20" height="20"/>
                             </activityIndicatorView>
                         </subviews>
@@ -622,6 +622,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="7ma-Y0-ADi"/>
-        <segue reference="8HR-Gk-7NE"/>
+        <segue reference="ak4-M8-rGE"/>
     </inferredMetricsTieBreakers>
 </document>

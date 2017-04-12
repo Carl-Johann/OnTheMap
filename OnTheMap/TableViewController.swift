@@ -26,10 +26,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        activityIndicator()
-        checkStudentForFirstName { (succes, error) in
-            print("succes: \(succes)")
-        }
+        updateTable()
     }
     
     
@@ -107,8 +104,10 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBAction func refreshButton(_ sender: Any) {
         indicator.startAnimating()
+        updateTable()
+    }
     
-        
+    func updateTable() {
         UdacityClient.sharedInstance.getStudentData(completionHandlerForStudentData: { (succes, errorString) in
             self.checkStudentForFirstName(completionHandlerForStudentsFirstName: { (succes, error) in
                 guard error == nil else { print("lort"); return }
@@ -119,16 +118,14 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
             })
         })
+
     }
     
     
-    
-    
     func checkStudentForFirstName(completionHandlerForStudentsFirstName: @escaping ( _ succes: Bool, _ error: String? ) -> Void) {
-        //UdacityClient.sharedInstance.students.removeAll()
-        UdacityStudentsData.sharedInstance.students.removeAll()
-        
-        //for student in UdacityClient.sharedInstance.students {
+        //UdacityStudentsData.sharedInstance.students.removeAll()
+        print("Students count: \(UdacityStudentsData.sharedInstance.students.count)")
+
         for student in UdacityStudentsData.sharedInstance.students {
             
             if student.firstName!.isEmpty { }

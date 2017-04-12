@@ -48,6 +48,7 @@ struct UdacityStudent {
         
         for result in results {
             StudentData.append(UdacityStudent(dictionary: result))
+            
         }
         
         return StudentData

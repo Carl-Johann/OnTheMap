@@ -70,9 +70,9 @@ class UdacityClient : NSObject, UIAlertViewDelegate {
     }
     
     func getStudentData(completionHandlerForStudentData: @escaping ( _ succes: Bool, _ error: String? ) -> Void) {
-        
-        
-        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation?limit=\(Constants.LimitNumber)?order\(Constants.AscOrder)")!)
+        UdacityStudentsData.sharedInstance.students.removeAll()
+        // When i added a limit and order, it downloaded 5000+ student locations at a time. 
+        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
         
         request.addValue(Constants.ApplicationID, forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue(Constants.RestAPIKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
@@ -99,8 +99,9 @@ class UdacityClient : NSObject, UIAlertViewDelegate {
                 return
             }
             let structuredStudentData = UdacityStudent.dataFromStudents(results)
-            // self.students = structuredStudentData
-            UdacityStudentsData.sharedInstance.students = structuredStudentData
+            
+            UdacityStudentsData.sharedInstance.students.append(contentsOf: structuredStudentData)
+            
             completionHandlerForStudentData(true, nil)
         }
         
@@ -149,10 +150,12 @@ class UdacityClient : NSObject, UIAlertViewDelegate {
         request.httpBody = "{\"uniqueKey\": \"\(UdacityClient.sharedInstance.accountKey)\", \"firstName\": \"\(firstName)\", \"lastName\": \"\(lastName)\",\"mapString\": \"\(locationText)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}".data(using: String.Encoding.utf8)
         
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
-            guard (error != nil) else { completionHandlerForPostPin(false, "\(error!)"); return }
+            if error != nil { completionHandlerForPostPin(false, "An error occured creating a pin") }
             
             completionHandlerForPostPin(true, nil)
+
         }
+        
         task.resume()
     }
     
@@ -168,14 +171,17 @@ class UdacityClient : NSObject, UIAlertViewDelegate {
             }
             
             
-            let range = Range(uncheckedBounds: (5, data!.count - 5))
+            let range = Range(uncheckedBounds: (5, data!.count))
             let newData = data?.subdata(in: range) /* subset response data! */
             
             let parsedResult = try! JSONSerialization.jsonObject(with: newData!, options: .allowFragments) as AnyObject
             
-            //print(NSString(data: newData!, encoding: String.Encoding.utf8.rawValue)!)
+            guard let user = parsedResult["user"] as? [String:AnyObject] else { print("adasda"); return }
+            guard let firstName = user["first_name"] as? String else { print("Couldn't get the 'firstName' from 'parsedResult'"); return }
+            guard let lastName = user["last_name"] as? String else { print("Couldn't get the 'lastName' from 'parsedResult'"); return }
             
-            
+            self.firstName = firstName
+            self.lastName = lastName
         }
         task.resume()
     

@@ -54,28 +54,19 @@ class AddPinMapViewController: UIViewController {
     @IBAction func createPinButtonAction(_ sender: Any) {
         print("accountKey: \(UdacityClient.sharedInstance.accountKey)")
         self.activityIndicator.startAnimating()
-        /* let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
-         request.httpMethod = "POST"
-         request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-         request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
-         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-         request.httpBody = "{\"uniqueKey\": \"\(UdacityClient.sharedInstance.accountKey)\", \"firstName\": \"Carl-Johan\", \"lastName\": \"Beurling\",\"mapString\": \"\(self.locationText)\", \"mediaURL\": \"\(self.mediaURL)\",\"latitude\": \(self.latitude), \"longitude\": \(self.longitude)}".data(using: String.Encoding.utf8)
-         let session = URLSession.shared
-         let task = session.dataTask(with: request as URLRequest) { data, response, error in
-         if error != nil {print(error!); return }
-         }
-         task.resume()*/
+
         
         UdacityClient.sharedInstance.postPin(latitude, longitude, locationText, mediaURL) { (succes, errorString) in
-            guard (errorString != nil) else {
-                self.presentError("An error occurred")
-                print("error: \(errorString!)")
+            if succes {
+                self.dismiss(animated: true, completion: nil)
                 self.activityIndicator.stopAnimating()
                 return
             }
             
-            self.dismiss(animated: true, completion: nil)
+            self.presentError("An error occurred")
+            print("error: \(errorString!)")
             self.activityIndicator.stopAnimating()
+            
         }
     }
     

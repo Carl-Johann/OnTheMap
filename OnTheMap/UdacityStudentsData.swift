@@ -11,11 +11,7 @@ import Foundation
 class UdacityStudentsData {
     
     var students: [UdacityStudent] = [UdacityStudent]()
-
-
-    
-    
-    
     
     static let sharedInstance = UdacityStudentsData()
+    
 }
