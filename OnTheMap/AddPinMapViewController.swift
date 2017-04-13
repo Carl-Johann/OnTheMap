@@ -64,6 +64,7 @@ class AddPinMapViewController: UIViewController {
             }
             
             self.presentError("An error occurred")
+            self.present(UdacityClient.sharedInstance.raiseError("An error occurred", "Error", "OK"), animated: true, completion: nil)
             print("error: \(errorString!)")
             self.activityIndicator.stopAnimating()
             
@@ -75,6 +76,8 @@ class AddPinMapViewController: UIViewController {
     func presentError(_ message: String, _ title: String = "Error", _ actionTitle: String = "OK") {
         self.present(UdacityClient.sharedInstance.raiseError(message, title, actionTitle), animated: true, completion: nil)
     }
+    
+    
     
     
 }

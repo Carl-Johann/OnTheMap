@@ -24,15 +24,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         UdacityClient.sharedInstance.getLoggedInUserData()
+        
+        setupMap { (succes, errorString) in
+            if errorString != nil { self.presentError("An error occured"); return }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        
-        setupMap { (succes, errorString) in
-            if succes == false { self.presentError("An error occured"); return }
-        }
-        
     }
     
     @IBAction func logoutButtonAction(_ sender: Any) {
@@ -77,7 +76,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             DispatchQueue.main.async {
                 
                 if succes {
-                    //self.students = UdacityClient.sharedInstance.students
                     self.students = UdacityStudentsData.sharedInstance.students
                     self.setupAnootations()
                     completionHandlerForSetupMap(true, nil)
@@ -147,27 +145,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         guard let mediaURl = URL(string: urlString) else { return }
         
-        DispatchQueue.global(qos: .userInteractive).async {
-            
-            /*let urlRequest = URLRequest(url: mediaURl!)
-             let MapVC = self.storyboard?.instantiateViewController(withIdentifier: "WebViewController") as! WebViewController
-             MapVC.urlRequest = urlRequest
-             
-             let webAuthNavigationController = UINavigationController()
-             webAuthNavigationController.pushViewController(MapVC, animated: false)*/
-            
-            DispatchQueue.main.async {
-                //self.present(webAuthNavigationController, animated: true, completion: nil)
-                UIApplication.shared.open(mediaURl, options: [:])
-                
-            }
-            
-        }
-        
-        
-        
-        
-        
+        DispatchQueue.main.async { UIApplication.shared.open(mediaURl, options: [:]) }
         
     }
     

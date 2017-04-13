@@ -70,6 +70,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     func areTextFieldsEmpty()-> Bool {
         if (emailLoginTextField.text?.isEmpty)! || (passwordLoginTextField.text?.isEmpty)! {
             self.presentError("Enter a password and email")
+            loading(false)
             return false
         }
     

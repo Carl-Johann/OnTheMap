@@ -67,20 +67,9 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if isURlValid(StudentAtRow.mediaURl!) {
             let mediaURl = URL(string: StudentAtRow.mediaURl!)
             
-            DispatchQueue.global(qos: .userInteractive).async {
-                
-                let urlRequest = URLRequest(url: mediaURl!)
-                let webVC = self.storyboard?.instantiateViewController(withIdentifier: "WebViewController") as! WebViewController
-                webVC.urlRequest = urlRequest
-                
-                let webAuthNC = UINavigationController()
-                webAuthNC.pushViewController(webVC, animated: false)
-                
-                DispatchQueue.main.async { self.present(webAuthNC, animated: true, completion: nil) }
-            }
+            DispatchQueue.main.async { UIApplication.shared.open(mediaURl!, options: [:]) }
             
         }
-        
     }
     
     
@@ -110,7 +99,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func updateTable() {
         UdacityClient.sharedInstance.getStudentData(completionHandlerForStudentData: { (succes, errorString) in
             self.checkStudentForFirstName(completionHandlerForStudentsFirstName: { (succes, error) in
-                guard error == nil else { print("lort"); return }
+                guard error == nil else { self.presentError("An error occured"); return }
                 DispatchQueue.main.async {
                     self.pinDataTableView.reloadData()
                     

@@ -15,6 +15,7 @@ class AddPinViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet var locationTextField: UITextField!
     @IBOutlet var linkTextField: UITextField!
     @IBOutlet var findOnTheMapButton: UIButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     
     var geocoder = CLGeocoder()
@@ -47,6 +48,7 @@ class AddPinViewController: UIViewController, UITextFieldDelegate {
     
     
     @IBAction func findOnTheMapButton(_ sender: Any) {
+        self.loading(true)
         DispatchQueue.main.async {
             
             
@@ -66,9 +68,11 @@ class AddPinViewController: UIViewController, UITextFieldDelegate {
                 self.longitude = longitude
                 
                 self.performSegue(withIdentifier: "AddPinSegue", sender: self)
+                self.loading(false)
                 
             }
         }
+        self.loading(false)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -112,6 +116,18 @@ class AddPinViewController: UIViewController, UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
+    
+    func loading(_ isLoading: Bool) {
+        switch isLoading {
+        case true:
+            activityIndicator.startAnimating()
+            findOnTheMapButton.isHidden = true
+        case false:
+            activityIndicator.stopAnimating()
+            findOnTheMapButton.isHidden = false
+        }
+    }
+
     
 }
 

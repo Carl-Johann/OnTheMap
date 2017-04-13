@@ -147,16 +147,19 @@ class UdacityClient : NSObject, UIAlertViewDelegate {
         request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
+        print("firrrstName: \(firstName)")
+        print("lassstName: \(lastName)")
+        
         request.httpBody = "{\"uniqueKey\": \"\(UdacityClient.sharedInstance.accountKey)\", \"firstName\": \"\(firstName)\", \"lastName\": \"\(lastName)\",\"mapString\": \"\(locationText)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}".data(using: String.Encoding.utf8)
         
-        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+        /*let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { completionHandlerForPostPin(false, "An error occured creating a pin") }
             
             completionHandlerForPostPin(true, nil)
 
         }
         
-        task.resume()
+        task.resume()*/
     }
     
     
@@ -179,6 +182,9 @@ class UdacityClient : NSObject, UIAlertViewDelegate {
             guard let user = parsedResult["user"] as? [String:AnyObject] else { print("adasda"); return }
             guard let firstName = user["first_name"] as? String else { print("Couldn't get the 'firstName' from 'parsedResult'"); return }
             guard let lastName = user["last_name"] as? String else { print("Couldn't get the 'lastName' from 'parsedResult'"); return }
+            
+            print("firstName: \(firstName)")
+            print("lastName: \(lastName)")
             
             self.firstName = firstName
             self.lastName = lastName
