@@ -13,7 +13,6 @@ class UdacityClient : NSObject, UIAlertViewDelegate {
     
     var session = URLSession.shared
     
-    //    var students: [UdacityStudent] = [UdacityStudent]()
     var sessionID: String? = ""
     let accountKey = 5608813109
     var firstName: String = ""
@@ -81,12 +80,14 @@ class UdacityClient : NSObject, UIAlertViewDelegate {
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             
             guard (error == nil) else {
-                completionHandlerForStudentData(false, "There was an error with GETting student Locations")
+                print("There was an error with GETting student Locations")
+                completionHandlerForStudentData(false, "An error occured")
                 return
             }
             
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
-                completionHandlerForStudentData(false, "Your request returned a status code other than 2xx!")
+                print("Your request returned a status code other than 2xx!")
+                completionHandlerForStudentData(false, "An error occured")
                 return
             }
             
@@ -152,14 +153,14 @@ class UdacityClient : NSObject, UIAlertViewDelegate {
         
         request.httpBody = "{\"uniqueKey\": \"\(UdacityClient.sharedInstance.accountKey)\", \"firstName\": \"\(firstName)\", \"lastName\": \"\(lastName)\",\"mapString\": \"\(locationText)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}".data(using: String.Encoding.utf8)
         
-        /*let task = session.dataTask(with: request as URLRequest) { data, response, error in
-            if error != nil { completionHandlerForPostPin(false, "An error occured creating a pin") }
+        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+            if error != nil { completionHandlerForPostPin(false, "An error occured creating your pin") }
             
             completionHandlerForPostPin(true, nil)
 
         }
         
-        task.resume()*/
+        task.resume()
     }
     
     

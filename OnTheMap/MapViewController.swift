@@ -11,7 +11,6 @@ import UIKit
 
 class MapViewController: UIViewController, MKMapViewDelegate {
     
-    var students: [UdacityStudent] = [UdacityStudent]()
     var studentAnnotations: [MKPointAnnotation] = []
     
     @IBOutlet var pinButton: UIBarButtonItem!
@@ -52,7 +51,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     @IBAction func refreshButton(_ sender: Any) {
         loading(true)
         self.setupMap { (succes, errorString) in
-            self.loading(false) }
+            if errorString != nil { self.presentError(errorString!) }
+            self.loading(false)
+        }
     }
     
     
@@ -70,13 +71,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     func setupMap(completionHandlerForSetupMap: @escaping (_ succes: Bool, _ errorString: String?) -> Void ) {
-        self.studentAnnotations.removeAll()
+        studentAnnotations.removeAll()
         
         UdacityClient.sharedInstance.getStudentData { (succes, errorString) in
             DispatchQueue.main.async {
                 
                 if succes {
-                    self.students = UdacityStudentsData.sharedInstance.students
                     self.setupAnootations()
                     completionHandlerForSetupMap(true, nil)
                 } else {
@@ -93,7 +93,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     func setupAnootations() {
         self.mapView.removeAnnotations(studentAnnotations)
         
-        for student in self.students {
+        for student in UdacityStudentsData.sharedInstance.students {
             
             let lat = CLLocationDegrees(student.latitude!)
             let long = CLLocationDegrees(student.longitude!)

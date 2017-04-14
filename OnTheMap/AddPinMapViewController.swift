@@ -41,7 +41,7 @@ class AddPinMapViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-
+        
         guard (self.mapView != nil) else {
             print("couldn't load map")
             self.presentError("An error occured while loading the map")
@@ -54,19 +54,19 @@ class AddPinMapViewController: UIViewController {
     @IBAction func createPinButtonAction(_ sender: Any) {
         print("accountKey: \(UdacityClient.sharedInstance.accountKey)")
         self.activityIndicator.startAnimating()
-
+        
         
         UdacityClient.sharedInstance.postPin(latitude, longitude, locationText, mediaURL) { (succes, errorString) in
-            if succes {
-                self.dismiss(animated: true, completion: nil)
+            if errorString != nil {
+                self.presentError("An error occurred")
+                self.present(UdacityClient.sharedInstance.raiseError("An error occurred", "Error", "OK"), animated: true, completion: nil)
+                print("error: \(errorString!)")
                 self.activityIndicator.stopAnimating()
-                return
             }
             
-            self.presentError("An error occurred")
-            self.present(UdacityClient.sharedInstance.raiseError("An error occurred", "Error", "OK"), animated: true, completion: nil)
-            print("error: \(errorString!)")
+            self.dismiss(animated: true, completion: nil)
             self.activityIndicator.stopAnimating()
+            return
             
         }
     }

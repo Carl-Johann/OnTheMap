@@ -396,11 +396,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="7mD-AF-Umc">
-                                <rect key="frame" x="189" y="350" width="37" height="37"/>
-                            </activityIndicatorView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7mx-qZ-NQZ">
-                                <rect key="frame" x="4" y="64" width="406" height="623"/>
+                                <rect key="frame" x="4" y="0.0" width="406" height="687"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PinDataCell" textLabel="rH1-Yx-sAd" detailTextLabel="4IS-qO-Ixa" style="IBUITableViewCellStyleSubtitle" id="Opw-oF-qey">
@@ -433,6 +430,9 @@
                                     <outlet property="delegate" destination="2si-wa-ldJ" id="uXP-H2-aq8"/>
                                 </connections>
                             </tableView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="7mD-AF-Umc">
+                                <rect key="frame" x="197" y="358" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -440,7 +440,7 @@
                             <constraint firstItem="v1O-Ky-VFo" firstAttribute="top" secondItem="7mx-qZ-NQZ" secondAttribute="bottom" id="V94-bz-0QL"/>
                             <constraint firstItem="7mx-qZ-NQZ" firstAttribute="leading" secondItem="rRl-Sw-aEI" secondAttribute="leadingMargin" constant="-16" id="aeC-bO-zW4"/>
                             <constraint firstItem="7mD-AF-Umc" firstAttribute="centerX" secondItem="rRl-Sw-aEI" secondAttribute="centerX" id="eiQ-E7-5sI"/>
-                            <constraint firstItem="7mx-qZ-NQZ" firstAttribute="top" secondItem="9Cl-QC-Cz2" secondAttribute="bottom" id="ljP-36-bo1"/>
+                            <constraint firstItem="7mx-qZ-NQZ" firstAttribute="top" secondItem="9Cl-QC-Cz2" secondAttribute="bottom" constant="-64" id="ljP-36-bo1"/>
                             <constraint firstAttribute="trailingMargin" secondItem="7mx-qZ-NQZ" secondAttribute="trailing" constant="-16" id="yjb-ZE-TVe"/>
                         </constraints>
                     </view>
@@ -466,6 +466,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="addPinButtonOutlet" destination="gpK-lN-CUI" id="R3A-dl-ZMI"/>
+                        <outlet property="loadingIndicator" destination="7mD-AF-Umc" id="HnF-h4-Jg4"/>
                         <outlet property="logoutButtonOutlet" destination="hm2-lY-zbZ" id="H8x-sg-xY9"/>
                         <outlet property="pinDataTableView" destination="7mx-qZ-NQZ" id="Vw2-7N-BxU"/>
                         <outlet property="refreshButtonOutlet" destination="h2I-RD-VSb" id="Tfg-Qp-YQy"/>
@@ -473,7 +474,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Sg-f2-kC3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1577" y="499"/>
+            <point key="canvasLocation" x="1576.8115942028987" y="498.91304347826093"/>
         </scene>
         <!--Web View Controller-->
         <scene sceneID="8Gb-Nx-Ik9">
@@ -626,7 +627,7 @@
         <image name="logo-u" width="62" height="62"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="7ma-Y0-ADi"/>
+        <segue reference="t7A-vY-Ohb"/>
         <segue reference="8HR-Gk-7NE"/>
     </inferredMetricsTieBreakers>
 </document>
