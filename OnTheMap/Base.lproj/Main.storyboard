@@ -476,39 +476,6 @@
             </objects>
             <point key="canvasLocation" x="1576.8115942028987" y="498.91304347826093"/>
         </scene>
-        <!--Web View Controller-->
-        <scene sceneID="8Gb-Nx-Ik9">
-            <objects>
-                <viewController storyboardIdentifier="WebViewController" id="r3x-6m-doI" customClass="WebViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="jAi-5L-XSF"/>
-                        <viewControllerLayoutGuide type="bottom" id="cyd-Qp-Scm"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="da0-ea-1tb">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6HP-re-e3a">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
-                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </webView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="6HP-re-e3a" firstAttribute="height" secondItem="da0-ea-1tb" secondAttribute="height" id="GaE-4Q-CqL"/>
-                            <constraint firstItem="6HP-re-e3a" firstAttribute="centerY" secondItem="da0-ea-1tb" secondAttribute="centerY" id="PuW-Oo-qa0"/>
-                            <constraint firstItem="6HP-re-e3a" firstAttribute="centerX" secondItem="da0-ea-1tb" secondAttribute="centerX" id="VkF-sN-jSI"/>
-                            <constraint firstItem="6HP-re-e3a" firstAttribute="width" secondItem="da0-ea-1tb" secondAttribute="width" id="rK2-oZ-udO"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="WebView" destination="6HP-re-e3a" id="PYc-zW-vrr"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="z7i-Jj-C8b" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2268" y="-232"/>
-        </scene>
         <!--Map View-->
         <scene sceneID="PD5-cf-LCA">
             <objects>

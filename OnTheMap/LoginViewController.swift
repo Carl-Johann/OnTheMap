@@ -52,19 +52,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func signUpButton(_ sender: Any) {
-        let url = URL(string: "https://www.udacity.com/account/auth#!/signup")
+        let mediaURL = URL(string: "https://www.udacity.com/account/auth#!/signup")
         
-        let MapVC = self.storyboard?.instantiateViewController(withIdentifier: "WebViewController") as! WebViewController
-        MapVC.urlRequest = URLRequest(url: url!)
+        DispatchQueue.main.async { UIApplication.shared.open(mediaURL!, options: [:]) }
         
-        let webAuthNavigationController = UINavigationController()
-        webAuthNavigationController.pushViewController(MapVC, animated: false)
         
-        DispatchQueue.main.async {
-            self.present(webAuthNavigationController, animated: true, completion: nil)
-        }
     }
-
+    
     
     
     func areTextFieldsEmpty()-> Bool {
