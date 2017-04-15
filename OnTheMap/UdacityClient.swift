@@ -165,30 +165,31 @@ class UdacityClient : NSObject, UIAlertViewDelegate {
     
     
     
-    func getLoggedInUserData() {
+    func getLoggedInUserData(CHForUserData: @escaping ( _ succes: Bool, _ errorString: String? ) -> Void) {
         
         let request = URLRequest(url: URL(string: "https://www.udacity.com/api/users/\(accountKey)")!)
         
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
-            if error != nil { // Handle error...
-                return
-            }
+            if error != nil { print("error: \(error!)"); return }
             
             
             let range = Range(uncheckedBounds: (5, data!.count))
-            let newData = data?.subdata(in: range) /* subset response data! */
+            let newData = data?.subdata(in: range)
             
             let parsedResult = try! JSONSerialization.jsonObject(with: newData!, options: .allowFragments) as AnyObject
             
-            guard let user = parsedResult["user"] as? [String:AnyObject] else { print("adasda"); return }
-            guard let firstName = user["first_name"] as? String else { print("Couldn't get the 'firstName' from 'parsedResult'"); return }
-            guard let lastName = user["last_name"] as? String else { print("Couldn't get the 'lastName' from 'parsedResult'"); return }
+            guard let user = parsedResult["user"] as? [String:AnyObject] else {CHForUserData(false, "couldn't retrive parsed result"); return }
+            
+            guard let firstName = user["first_name"] as? String else { CHForUserData(false, "couldn't firstName from parsedResult") ; return }
+            
+            guard let lastName = user["last_name"] as? String else { CHForUserData(false, "couldn't lastName from parsedResult"); return }
             
             print("firstName: \(firstName)")
             print("lastName: \(lastName)")
             
             self.firstName = firstName
             self.lastName = lastName
+            CHForUserData(true, nil)
         }
         task.resume()
     

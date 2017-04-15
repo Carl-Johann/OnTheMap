@@ -26,7 +26,7 @@ struct UdacityStudent {
     // construct a TMDBMovie from a dictionary
      init(dictionary: [String:AnyObject]) {
         
-        if let firstName =  dictionary[UdacityClient.StudentLocationJSONResponseKeys.FirstName] as? String { self.firstName = firstName }
+        
         
         if let lastName = dictionary[UdacityClient.StudentLocationJSONResponseKeys.LastName] as? String { self.lastName = lastName}
         
@@ -39,6 +39,8 @@ struct UdacityStudent {
         if let mapString = dictionary[UdacityClient.StudentLocationJSONResponseKeys.MapString] as? String { self.mapString = mapString }
         
         if let mediaURl = dictionary[UdacityClient.StudentLocationJSONResponseKeys.MediaURL] as? String { self.mediaURl = mediaURl }
+        
+        if let firstName = dictionary[UdacityClient.StudentLocationJSONResponseKeys.FirstName] as? String {    self.firstName = firstName }
     
     }
     
@@ -46,10 +48,7 @@ struct UdacityStudent {
         
         var StudentData = [UdacityStudent]()
         
-        for result in results {
-            StudentData.append(UdacityStudent(dictionary: result))
-            
-        }
+        for result in results { StudentData.append(UdacityStudent(dictionary: result)) }
         
         return StudentData
      }

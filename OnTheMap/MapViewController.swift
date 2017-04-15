@@ -22,16 +22,19 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        UdacityClient.sharedInstance.getLoggedInUserData()
-        
-        setupMap { (succes, errorString) in
-            if errorString != nil { self.presentError("An error occured"); return }
+        UdacityClient.sharedInstance.getLoggedInUserData { (succes, errorString) in
+            if succes {
+                self.setupMap { (succes, errorString) in
+                    if errorString != nil { self.presentError("An error occured"); return }
+                }
+            } else { print("error: \(errorString!)")}
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
     }
+    
     
     @IBAction func logoutButtonAction(_ sender: Any) {
         loading(true)
@@ -97,14 +100,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
             let lat = CLLocationDegrees(student.latitude!)
             let long = CLLocationDegrees(student.longitude!)
-            
+            guard let firstname = student.firstName else { print("intet navn"); return }
             
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
             
             
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
-            annotation.title = "\(student.firstName!) \(student.lastName!)"
+            annotation.title = "\(firstname) \(student.lastName!)"
             annotation.subtitle = student.mediaURl!
             
             
