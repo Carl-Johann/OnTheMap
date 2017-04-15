@@ -72,7 +72,6 @@ class AddPinViewController: UIViewController, UITextFieldDelegate {
                 
             }
         }
-        self.loading(false)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

@@ -59,7 +59,6 @@ class AddPinMapViewController: UIViewController {
         UdacityClient.sharedInstance.postPin(latitude, longitude, locationText, mediaURL) { (succes, errorString) in
             if errorString != nil {
                 self.presentError("An error occurred")
-                self.present(UdacityClient.sharedInstance.raiseError("An error occurred", "Error", "OK"), animated: true, completion: nil)
                 print("error: \(errorString!)")
                 self.activityIndicator.stopAnimating()
             }
