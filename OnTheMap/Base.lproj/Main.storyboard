@@ -15,7 +15,7 @@
         <!--Login View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="LoginViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginViewController" id="BYZ-38-t0r" customClass="LoginViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -454,7 +454,7 @@
                         <rightBarButtonItems>
                             <barButtonItem image="icon_addpin" id="gpK-lN-CUI">
                                 <connections>
-                                    <segue destination="Yp2-jb-eX3" kind="presentation" id="t7A-vY-Ohb"/>
+                                    <action selector="AddPinButtonAction:" destination="2si-wa-ldJ" id="oec-yL-IQB"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem image="icon_refresh" id="h2I-RD-VSb">
@@ -470,6 +470,7 @@
                         <outlet property="logoutButtonOutlet" destination="hm2-lY-zbZ" id="H8x-sg-xY9"/>
                         <outlet property="pinDataTableView" destination="7mx-qZ-NQZ" id="Vw2-7N-BxU"/>
                         <outlet property="refreshButtonOutlet" destination="h2I-RD-VSb" id="Tfg-Qp-YQy"/>
+                        <segue destination="Yp2-jb-eX3" kind="presentation" identifier="TableViewToAddPin" id="B6C-0Y-3GJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Sg-f2-kC3" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -516,7 +517,7 @@
                             <constraint firstItem="wpd-Rl-Gcp" firstAttribute="top" secondItem="0SB-EG-aau" secondAttribute="bottom" id="onS-60-ZFD"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" selectedImage="icon_mapview-selected" id="V91-0W-FEB"/>
+                    <tabBarItem key="tabBarItem" title="" selectedImage="icon_mapview-selected" id="V91-0W-FEB" userLabel="Map"/>
                     <navigationItem key="navigationItem" title="On The Map" id="juz-LL-lsb">
                         <barButtonItem key="leftBarButtonItem" title="Logout" id="Lvf-Mx-bQ4">
                             <connections>
@@ -526,7 +527,7 @@
                         <rightBarButtonItems>
                             <barButtonItem image="icon_addpin" id="h4Z-mz-RJS">
                                 <connections>
-                                    <segue destination="Yp2-jb-eX3" kind="presentation" id="7ma-Y0-ADi"/>
+                                    <action selector="addPinButton:" destination="cxC-rL-P6N" id="onF-xE-4Sm"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem image="icon_refresh" id="TPo-Jm-ps6">
@@ -543,11 +544,12 @@
                         <outlet property="mapView" destination="oGg-Id-Q6f" id="d2s-8c-8rp"/>
                         <outlet property="pinButton" destination="h4Z-mz-RJS" id="JMo-eA-qim"/>
                         <outlet property="refreshButton" destination="TPo-Jm-ps6" id="7k9-ZX-7dB"/>
+                        <segue destination="Yp2-jb-eX3" kind="presentation" identifier="MapViewToAddPin" id="30E-5l-Hgr"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wdU-DB-McE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1578" y="-232"/>
+            <point key="canvasLocation" x="1577" y="-232"/>
         </scene>
         <!--Map-->
         <scene sceneID="FgM-Ob-9nY">
@@ -594,7 +596,7 @@
         <image name="logo-u" width="62" height="62"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="t7A-vY-Ohb"/>
-        <segue reference="8HR-Gk-7NE"/>
+        <segue reference="B6C-0Y-3GJ"/>
+        <segue reference="ak4-M8-rGE"/>
     </inferredMetricsTieBreakers>
 </document>

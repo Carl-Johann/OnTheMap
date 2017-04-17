@@ -110,7 +110,35 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
     }
     
+    @IBAction func AddPinButtonAction(_ sender: Any) {
+        if checkIfUserHasAPin() {
+            let firstName = UdacityUserData.sharedInstance.user.first!.firstName!
+            let lastName = UdacityUserData.sharedInstance.user.first!.lastName!
+            
+            let invalidLinkAlert = UIAlertController(title: "", message: "User \"\(firstName) \(lastName)\" Has Already Posted a Student Location. Would You Like to Overwrite That Location?", preferredStyle: .alert)
+            
+            
+            let overwriteAction = UIAlertAction(title: "Overwrite", style: UIAlertActionStyle.default) { UIAlertAction in
+                self.performSegue(withIdentifier: "MapViewToAddPin", sender: self)
+            }
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+            
+            invalidLinkAlert.addAction(overwriteAction)
+            invalidLinkAlert.addAction(cancelAction)
+            
+            self.present(invalidLinkAlert, animated: true, completion: nil)
+        } else {
+            self.navigationController?.performSegue(withIdentifier: "TableViewToAddPin", sender: self)
+        }
+        
+
+    }
     
+    func checkIfUserHasAPin() -> Bool {
+        if UdacityUserData.sharedInstance.user.isEmpty { return false }
+        return true
+    }
  
     func presentError(_ message: String, _ title: String = "Error", _ actionTitle: String = "OK") {
         self.present(UdacityClient.sharedInstance.raiseError(message, title, actionTitle), animated: true, completion: nil)

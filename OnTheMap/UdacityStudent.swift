@@ -12,6 +12,7 @@ struct UdacityStudent {
     
     // MARK: Properties
     
+    var createdAt: String? = ""
     var firstName: String? = ""
     var lastName: String? = ""
     var latitude: Double? = 0.0
@@ -19,14 +20,17 @@ struct UdacityStudent {
     var mapString: String? = ""
     var mediaURl: String? = ""
     var objectID: String? = ""
+    var uniqueKey: String? = ""
+    var updatedAt: String? = ""
     
     
     // MARK: Initializers
     
-    // construct a TMDBMovie from a dictionary
      init(dictionary: [String:AnyObject]) {
         
+        if let createdAt = dictionary[UdacityClient.StudentLocationJSONResponseKeys.CreatedAt ] as? String { self.createdAt = createdAt }
         
+        if let firstName = dictionary[UdacityClient.StudentLocationJSONResponseKeys.FirstName] as? String { self.firstName = firstName }
         
         if let lastName = dictionary[UdacityClient.StudentLocationJSONResponseKeys.LastName] as? String { self.lastName = lastName}
         
@@ -38,10 +42,12 @@ struct UdacityStudent {
         
         if let mapString = dictionary[UdacityClient.StudentLocationJSONResponseKeys.MapString] as? String { self.mapString = mapString }
         
+        if let uniqueKey = dictionary[UdacityClient.StudentLocationJSONResponseKeys.UniqueKey] as? String { self.uniqueKey = uniqueKey }
+        
         if let mediaURl = dictionary[UdacityClient.StudentLocationJSONResponseKeys.MediaURL] as? String { self.mediaURl = mediaURl }
         
-        if let firstName = dictionary[UdacityClient.StudentLocationJSONResponseKeys.FirstName] as? String {    self.firstName = firstName }
-    
+        if let updatedAt = dictionary[UdacityClient.StudentLocationJSONResponseKeys.UpdatedAt] as? String { self.updatedAt = updatedAt }
+
     }
     
     static func dataFromStudents(_ results: [[String:AnyObject]]) -> [UdacityStudent] {

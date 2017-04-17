@@ -22,17 +22,39 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        UdacityClient.sharedInstance.getLoggedInUserData { (succes, errorString) in
-            if succes {
-                self.setupMap { (succes, errorString) in
-                    if errorString != nil { self.presentError("An error occured"); return }
-                }
-            } else { print("error: \(errorString!)")}
+        
+        UdacityClient.sharedInstance.getUserData { (succes) in
+            if succes { UdacityClient.sharedInstance.getLoggedInUserData() }
+            else { self.presentError("An error occured") }
         }
+        
+        
+        // print("\nIn MapViewController.viewDidLoad()..." )
+        // print("\tUdacityClient.sharedInstance().firstName: \(UdacityClient.sharedInstance.firstName)")
+        // print("\tUdacityClient.sharedInstance().lastName: \(UdacityClient.sharedInstance.lastName)")
+        
+        
+        
     }
+    
+    // MARK: TODO save firstName and lastName to a userStudentLocation using UdacityStudent struct
+    // MARK: TODO get user's studentLocation from Parse
+    /*
+     if an array of student location exists - find the latest student location  (create date is the latest)
+     save object id to userStudentLocation
+     - objectID will be used when adding/updating student  location
+     else - set object to ""
+     */
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        self.mapView.removeAnnotations(studentAnnotations)
+        self.studentAnnotations.removeAll()
+        self.setupMap { (succes, errorString) in
+            if errorString != nil { self.presentError("An error occured") }
+        }
+        
     }
     
     
@@ -48,11 +70,36 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    
+    @IBAction func addPinButton(_ sender: Any) {
+        
+        if checkIfUserHasAPin() {
+            let firstName = UdacityUserData.sharedInstance.user.first!.firstName!
+            let lastName = UdacityUserData.sharedInstance.user.first!.lastName!
+            
+            let invalidLinkAlert = UIAlertController(title: "", message: "User \"\(firstName) \(lastName)\" Has Already Posted a Student Location. Would You Like to Overwrite That Location?", preferredStyle: .alert)
+            
+            
+            let overwriteAction = UIAlertAction(title: "Overwrite", style: UIAlertActionStyle.default) { UIAlertAction in
+                self.performSegue(withIdentifier: "MapViewToAddPin", sender: self)
+            }
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+            
+            invalidLinkAlert.addAction(overwriteAction)
+            invalidLinkAlert.addAction(cancelAction)
+            
+            self.present(invalidLinkAlert, animated: true, completion: nil)
+        } else {
+            self.navigationController?.performSegue(withIdentifier: "MapViewToAddPin", sender: self)
+        }
+        
+    }
     
     
     @IBAction func refreshButton(_ sender: Any) {
         loading(true)
+        self.mapView.removeAnnotations(studentAnnotations)
+        self.studentAnnotations.removeAll()
         self.setupMap { (succes, errorString) in
             if errorString != nil { self.presentError(errorString!) }
             self.loading(false)
@@ -61,27 +108,24 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     func isURlValid(_ url: String)-> Bool {
-        let alert = UIAlertController(title: "Error", message: "Invalid Link", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         
-        if url.contains("https://") {
-            return true
-        }
+        if url.contains("https://") { return true }
         
-        self.present(alert, animated: true, completion: nil)
+        self.presentError("Invalid URL", "Error", "OK")
         return false
     }
     
     
     func setupMap(completionHandlerForSetupMap: @escaping (_ succes: Bool, _ errorString: String?) -> Void ) {
-        studentAnnotations.removeAll()
         
         UdacityClient.sharedInstance.getStudentData { (succes, errorString) in
             DispatchQueue.main.async {
                 
                 if succes {
-                    self.setupAnootations()
-                    completionHandlerForSetupMap(true, nil)
+                    self.setupAnnotations { (succes) in
+                        completionHandlerForSetupMap(true, nil)
+                    }
+                    
                 } else {
                     print(errorString!)
                     completionHandlerForSetupMap(false, errorString)
@@ -90,31 +134,31 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 
             }
         }
+        
     }
     
     
-    func setupAnootations() {
-        self.mapView.removeAnnotations(studentAnnotations)
+    func setupAnnotations(CHForSetupAnnotations: @escaping (_ succes: Bool) -> Void ) {
         
         for student in UdacityStudentsData.sharedInstance.students {
             
             let lat = CLLocationDegrees(student.latitude!)
             let long = CLLocationDegrees(student.longitude!)
-            guard let firstname = student.firstName else { print("intet navn"); return }
+            
             
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
             
             
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
-            annotation.title = "\(firstname) \(student.lastName!)"
+            annotation.title = "\(student.firstName!) \(student.lastName!)"
             annotation.subtitle = student.mediaURl!
             
             
             self.studentAnnotations.append(annotation)
         }
         self.mapView.addAnnotations(self.studentAnnotations)
-        
+        CHForSetupAnnotations(true)
     }
     
     
@@ -152,6 +196,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
     }
     
+    func checkIfUserHasAPin() -> Bool {
+        if UdacityUserData.sharedInstance.user.isEmpty { return false }
+        return true
+    }
     
     func loading(_ isLoading: Bool) {
         switch isLoading {

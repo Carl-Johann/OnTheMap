@@ -11,12 +11,16 @@ import UIKit
 
 class UdacityClient : NSObject, UIAlertViewDelegate {
     
+    var currentUser = UdacityUserData.sharedInstance.user
     var session = URLSession.shared
     
+    
     var sessionID: String? = ""
-    let accountKey = 5608813109
-    var firstName: String = ""
-    var lastName: String = ""
+    var objectID: String = ""
+    
+    //var firstName: String = ""
+    //var lastName: String = ""
+    
     
     
     func getSessionID(_ username: String,_ password: String, completionHandlerForSessionID: @escaping (_ succes: Bool?, _ error: String? ) -> Void) {
@@ -68,10 +72,14 @@ class UdacityClient : NSObject, UIAlertViewDelegate {
         
     }
     
+    
+    
+    
+    
     func getStudentData(completionHandlerForStudentData: @escaping ( _ succes: Bool, _ error: String? ) -> Void) {
         UdacityStudentsData.sharedInstance.students.removeAll()
         // When i added a limit and order, it downloaded 5000+ student locations at a time. 
-        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
+        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation?order=\(Constants.DescUpdatedAt)")!)
         
         request.addValue(Constants.ApplicationID, forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue(Constants.RestAPIKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
@@ -99,6 +107,7 @@ class UdacityClient : NSObject, UIAlertViewDelegate {
                 completionHandlerForStudentData(false, "Couldn't find any results")
                 return
             }
+            
             let structuredStudentData = UdacityStudent.dataFromStudents(results)
             
             UdacityStudentsData.sharedInstance.students.append(contentsOf: structuredStudentData)
@@ -144,58 +153,151 @@ class UdacityClient : NSObject, UIAlertViewDelegate {
         let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
         
         request.httpMethod = "POST"
-        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
+        request.addValue(Constants.ApplicationID, forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue(Constants.RestAPIKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        print("firrrstName: \(firstName)")
-        print("lassstName: \(lastName)")
         
-        request.httpBody = "{\"uniqueKey\": \"\(UdacityClient.sharedInstance.accountKey)\", \"firstName\": \"\(firstName)\", \"lastName\": \"\(lastName)\",\"mapString\": \"\(locationText)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}".data(using: String.Encoding.utf8)
+        request.httpBody = "{\"uniqueKey\": \"\(Constants.accountKey)\", \"firstName\": \"\(currentUser[0].firstName!)\", \"lastName\": \"\(currentUser[0].lastName!)\",\"mapString\": \"\(locationText)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}".data(using: String.Encoding.utf8)
         
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
-            if error != nil { completionHandlerForPostPin(false, "An error occured creating your pin") }
+         if error != nil { completionHandlerForPostPin(false, "An error occured creating your pin") }
+         
+         completionHandlerForPostPin(true, nil)
+         
+         }
+         
+         task.resume()
+    }
+    
+    
+    
+    
+    
+    func getLoggedInUserData() {
+        DispatchQueue.global(qos: .background).async {
             
-            completionHandlerForPostPin(true, nil)
+            
+            var currentUser = UdacityUserData.sharedInstance.user
+            let request = URLRequest(url: URL(string: "https://www.udacity.com/api/users/\(Constants.accountKey)")!)
+            
+            let task = self.session.dataTask(with: request as URLRequest) { data, response, error in
+                if error != nil { print("error: \(error!)"); return }
+                
+                
+                let range = Range(uncheckedBounds: (5, data!.count))
+                let newData = data?.subdata(in: range)
+                
+                let parsedResult = try! JSONSerialization.jsonObject(with: newData!, options: .allowFragments) as AnyObject
+                
+                // print("\nin UdacityClient.getLoggedInUserData...")
+                // print("\tgetLoggedInUserData: \(parsedResult)")
+                
+                guard let user = parsedResult["user"] as? [String:AnyObject] else { print("couldn't retrive parsed result"); return }
+                
+                guard let firstName = user["first_name"] as? String else { print("couldn't retrive 'firstName' from 'parsedResult'"); return }
+                
+                guard let lastName = user["last_name"] as? String else { print("couldn't retrive 'lastName' from 'parsedResult'"); return }
+                
+                print("firstName: \(firstName)")
+                print("lastName: \(lastName)")
+                
+                
+                currentUser[0].firstName! = firstName
+                currentUser[0].lastName! = lastName
+                
+                //self.firstName = firstName
+                //self.lastName = lastName
+                
+            }
+            task.resume()
+            
+        }
+        
+    }
+    
+    
+    
+    
 
-        }
+    func updateUserPinData(_ latitude: Double, _ longitude: Double,_ mapSting: String, _ mediaURL: String, CHForUserPinData: @escaping ( _ succes: Bool, _ errorString: String? ) -> Void) {
+        let currentUser = UdacityUserData.sharedInstance.user.first!
         
-        task.resume()
-    }
-    
-    
-    
-    func getLoggedInUserData(CHForUserData: @escaping ( _ succes: Bool, _ errorString: String? ) -> Void) {
+        let urlString = "https://parse.udacity.com/parse/classes/StudentLocation/\(currentUser.objectID!)"
+        let url = URL(string: urlString)
+        let request = NSMutableURLRequest(url: url!)
         
-        let request = URLRequest(url: URL(string: "https://www.udacity.com/api/users/\(accountKey)")!)
+        request.httpMethod = "PUT"
         
+        request.addValue(Constants.ApplicationID, forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue(Constants.RestAPIKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        request.httpBody = "{\"uniqueKey\": \"\(Constants.accountKey)\", \"firstName\": \"\(currentUser.firstName!)\", \"lastName\": \"\(currentUser.lastName!)\",\"mapString\": \"\(mapSting)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}".data(using: String.Encoding.utf8)
+
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
-            if error != nil { print("error: \(error!)"); return }
+            if error != nil { print("Error at UdacityClient.swift 230: \(error!)"); return }
             
+            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
+                print("UdacityClient.swift 253: Your request returned a status code other than 2xx!")
+                CHForUserPinData(false, "An error occured")
+                return
+            }
             
-            let range = Range(uncheckedBounds: (5, data!.count))
-            let newData = data?.subdata(in: range)
+            CHForUserPinData(true, nil)
             
-            let parsedResult = try! JSONSerialization.jsonObject(with: newData!, options: .allowFragments) as AnyObject
-            
-            guard let user = parsedResult["user"] as? [String:AnyObject] else {CHForUserData(false, "couldn't retrive parsed result"); return }
-            
-            guard let firstName = user["first_name"] as? String else { CHForUserData(false, "couldn't firstName from parsedResult") ; return }
-            
-            guard let lastName = user["last_name"] as? String else { CHForUserData(false, "couldn't lastName from parsedResult"); return }
-            
-            print("firstName: \(firstName)")
-            print("lastName: \(lastName)")
-            
-            self.firstName = firstName
-            self.lastName = lastName
-            CHForUserData(true, nil)
         }
         task.resume()
-    
-    
-    
+        
     }
+    
+    
+    
+    
+    
+    func getUserData(CHForUserData: @escaping (_ succes: Bool) -> Void) {
+        DispatchQueue.global(qos: .background).async {
+            
+            
+            let urlString = "https://parse.udacity.com/parse/classes/StudentLocation?where=%7B%22uniqueKey%22%3A%22\(Constants.accountKey)%22%7D&order=\(Constants.DescCreatedAt)&limit=\(Constants.LimitNumber)"
+            
+            let url = URL(string: urlString)
+            let request = NSMutableURLRequest(url: url!)
+            
+            request.addValue(Constants.ApplicationID, forHTTPHeaderField: "X-Parse-Application-Id")
+            request.addValue(Constants.RestAPIKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
+            
+            
+            
+            let task = self.session.dataTask(with: request as URLRequest) { data, response, error in
+                if error != nil { print("error: \(error!)"); CHForUserData(false); return }
+                
+                guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
+                    print("UdacityClient.swift 253: Your request returned a status code other than 2xx!")
+                    CHForUserData(false)
+                    return
+                }
+                
+                
+                let parsedResult = try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as AnyObject
+                
+                guard let results = parsedResult["results"] as? [[String:AnyObject]] else {
+                    print("UdacityClient.swift 261: Couldn't find any results")
+                    CHForUserData(false)
+                    return
+                }
+                
+                UdacityUserData.sharedInstance.user = UdacityStudent.dataFromStudents(results)
+                self.objectID = UdacityUserData.sharedInstance.user.first!.objectID!
+                CHForUserData(true)
+            }
+            task.resume()
+        
+        }
+    }
+    
+    
+    
     
     
     func raiseError(_ message: String, _ title: String, _ actionTitle: String) -> UIAlertController {
@@ -205,6 +307,8 @@ class UdacityClient : NSObject, UIAlertViewDelegate {
         return invalidLinkAlert
     }
     
+        
+        
     
     static let sharedInstance = UdacityClient()
     

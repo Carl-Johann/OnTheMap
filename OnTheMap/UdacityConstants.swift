@@ -12,12 +12,18 @@ import Foundation
 extension UdacityClient {
     
     struct Constants {
+    
+        static let accountKey = 5608813109
         
         static let ApplicationID = "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr"
         static let RestAPIKey = "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY"
-        static let LimitNumber = 100
-        static let DescOrder = "-updatedAt"
-        static let AscOrder = "updatedAt"
+        
+        static let LimitNumber = 1
+        static let DescUpdatedAt = "-updatedAt"
+        static let AscUpdatedAt = "updatedAt"
+        
+        static let AscCreatedAt = "createdAt"
+        static let DescCreatedAt = "-createdAt"
         
     }
     

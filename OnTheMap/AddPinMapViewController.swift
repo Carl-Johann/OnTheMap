@@ -39,38 +39,51 @@ class AddPinMapViewController: UIViewController {
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        
-        guard (self.mapView != nil) else {
-            print("couldn't load map")
-            self.presentError("An error occured while loading the map")
-            return
-        }
-        
-    }
-    
     
     @IBAction func createPinButtonAction(_ sender: Any) {
-        print("accountKey: \(UdacityClient.sharedInstance.accountKey)")
+        print("accountKey: \(UdacityClient.Constants.accountKey)")
+        print("fornavn: \(UdacityUserData.sharedInstance.user[0].firstName!)")
+        print("efternavn: \(UdacityUserData.sharedInstance.user[0].lastName!)")
         self.activityIndicator.startAnimating()
         
-        
-        UdacityClient.sharedInstance.postPin(latitude, longitude, locationText, mediaURL) { (succes, errorString) in
-            if errorString != nil {
-                self.presentError("An error occurred")
-                print("error: \(errorString!)")
+        if checkIfUserHasAPin() {
+
+            UdacityClient.sharedInstance.updateUserPinData(latitude, longitude, locationText, mediaURL) { (succes, errorString) in
+                if errorString != nil {
+                    self.presentError("An error occurred")
+                    print("error: \(errorString!)")
+                    self.activityIndicator.stopAnimating()
+                    
+                }
+                
+                self.dismiss(animated: true, completion: nil)
                 self.activityIndicator.stopAnimating()
             }
             
-            self.dismiss(animated: true, completion: nil)
-            self.activityIndicator.stopAnimating()
-            return
+        } else {
+
+            UdacityClient.sharedInstance.postPin(latitude, longitude, locationText, mediaURL) { (succes, errorString) in
+                if errorString != nil {
+                    self.presentError("An error occurred")
+                    print("error: \(errorString!)")
+                    self.activityIndicator.stopAnimating()
+                }
+                
+                self.dismiss(animated: true, completion: nil)
+                self.activityIndicator.stopAnimating()
+                
+            }
             
         }
     }
     
     
+    func checkIfUserHasAPin() -> Bool {
+        if UdacityUserData.sharedInstance.user.isEmpty { return false }
+        return true
+    }
+    
+
     
     func presentError(_ message: String, _ title: String = "Error", _ actionTitle: String = "OK") {
         self.present(UdacityClient.sharedInstance.raiseError(message, title, actionTitle), animated: true, completion: nil)
