@@ -28,24 +28,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             else { self.presentError("An error occured") }
         }
         
-        
-        // print("\nIn MapViewController.viewDidLoad()..." )
-        // print("\tUdacityClient.sharedInstance().firstName: \(UdacityClient.sharedInstance.firstName)")
-        // print("\tUdacityClient.sharedInstance().lastName: \(UdacityClient.sharedInstance.lastName)")
-        
-        
-        
     }
-    
-    // MARK: TODO save firstName and lastName to a userStudentLocation using UdacityStudent struct
-    // MARK: TODO get user's studentLocation from Parse
-    /*
-     if an array of student location exists - find the latest student location  (create date is the latest)
-     save object id to userStudentLocation
-     - objectID will be used when adding/updating student  location
-     else - set object to ""
-     */
-    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)

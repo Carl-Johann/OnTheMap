@@ -14,6 +14,8 @@ class AddPinMapViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
+    
+    
     var locationText: String = ""
     var mediaURL: String = ""
     var latitude: Double = 0.0

@@ -13,8 +13,8 @@ struct UdacityStudent {
     // MARK: Properties
     
     var createdAt: String? = ""
-    var firstName: String? = ""
-    var lastName: String? = ""
+    var firstName: String? = "Unkown"
+    var lastName: String? = "Name"
     var latitude: Double? = 0.0
     var longitude: Double? = 0.0
     var mapString: String? = ""

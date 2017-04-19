@@ -17,9 +17,8 @@ class UdacityClient : NSObject, UIAlertViewDelegate {
     
     var sessionID: String? = ""
     var objectID: String = ""
-    
-    //var firstName: String = ""
-    //var lastName: String = ""
+    var firstName: String = ""
+    var lastName: String = ""
     
     
     
@@ -178,7 +177,6 @@ class UdacityClient : NSObject, UIAlertViewDelegate {
         DispatchQueue.global(qos: .background).async {
             
             
-            var currentUser = UdacityUserData.sharedInstance.user
             let request = URLRequest(url: URL(string: "https://www.udacity.com/api/users/\(Constants.accountKey)")!)
             
             let task = self.session.dataTask(with: request as URLRequest) { data, response, error in
@@ -202,12 +200,8 @@ class UdacityClient : NSObject, UIAlertViewDelegate {
                 print("firstName: \(firstName)")
                 print("lastName: \(lastName)")
                 
-                
-                currentUser[0].firstName! = firstName
-                currentUser[0].lastName! = lastName
-                
-                //self.firstName = firstName
-                //self.lastName = lastName
+                self.firstName = firstName
+                self.lastName = lastName
                 
             }
             task.resume()
@@ -221,9 +215,8 @@ class UdacityClient : NSObject, UIAlertViewDelegate {
     
 
     func updateUserPinData(_ latitude: Double, _ longitude: Double,_ mapSting: String, _ mediaURL: String, CHForUserPinData: @escaping ( _ succes: Bool, _ errorString: String? ) -> Void) {
-        let currentUser = UdacityUserData.sharedInstance.user.first!
-        
-        let urlString = "https://parse.udacity.com/parse/classes/StudentLocation/\(currentUser.objectID!)"
+
+        let urlString = "https://parse.udacity.com/parse/classes/StudentLocation/\(self.objectID)"
         let url = URL(string: urlString)
         let request = NSMutableURLRequest(url: url!)
         
@@ -232,8 +225,11 @@ class UdacityClient : NSObject, UIAlertViewDelegate {
         request.addValue(Constants.ApplicationID, forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue(Constants.RestAPIKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+    
+        print("firstName: \(firstName)")
+        print("lastName: \(lastName)")
         
-        request.httpBody = "{\"uniqueKey\": \"\(Constants.accountKey)\", \"firstName\": \"\(currentUser.firstName!)\", \"lastName\": \"\(currentUser.lastName!)\",\"mapString\": \"\(mapSting)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}".data(using: String.Encoding.utf8)
+        request.httpBody = "{\"uniqueKey\": \"\(Constants.accountKey)\", \"firstName\": \"\(self.firstName)\", \"lastName\": \"\(self.lastName)\",\"mapString\": \"\(mapSting)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}".data(using: String.Encoding.utf8)
 
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { print("Error at UdacityClient.swift 230: \(error!)"); return }

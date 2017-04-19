@@ -47,9 +47,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 self.performSegue(withIdentifier: "LoginSegue", sender: self)
                 self.loading(false)
             }
-            
         }
+        
     }
+    
     
     @IBAction func signUpButton(_ sender: Any) {
         let mediaURL = URL(string: "https://www.udacity.com/account/auth#!/signup")

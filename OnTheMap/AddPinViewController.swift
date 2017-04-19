@@ -53,7 +53,7 @@ class AddPinViewController: UIViewController, UITextFieldDelegate {
             
             
             self.geocoder.geocodeAddressString(self.locationTextField.text!) { (placemark, error) in
-                if error != nil { self.raiseError("Location Is Not Valid"); return }
+                if error != nil { self.raiseError("Location Is Not Valid");self.loading(false) ; return }
                 self.checkLinkTextField(self.linkTextField)
                 
                 guard let placemark = placemark?[0] else { return }
