@@ -43,9 +43,9 @@ class AddPinMapViewController: UIViewController {
     
     
     @IBAction func createPinButtonAction(_ sender: Any) {
-        print("accountKey: \(UdacityClient.Constants.accountKey)")
-        print("fornavn: \(UdacityUserData.sharedInstance.user[0].firstName!)")
-        print("efternavn: \(UdacityUserData.sharedInstance.user[0].lastName!)")
+        print("accountKey: \(UdacityClient.sharedInstance.accountKey)")
+        print("fornavn: \(UdacityClient.sharedInstance.firstName)")
+        print("efternavn: \(UdacityClient.sharedInstance.lastName)")
         self.activityIndicator.startAnimating()
         
         if checkIfUserHasAPin() {

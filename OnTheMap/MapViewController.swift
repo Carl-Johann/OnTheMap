@@ -22,9 +22,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print("1")
         UdacityClient.sharedInstance.getUserData { (succes) in
-            if succes { UdacityClient.sharedInstance.getLoggedInUserData() }
+            print("2")
+            if succes { print("3"); UdacityClient.sharedInstance.getLoggedInUserData() }
             else { self.presentError("An error occured") }
         }
         
@@ -56,8 +57,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     @IBAction func addPinButton(_ sender: Any) {
         
         if checkIfUserHasAPin() {
-            let firstName = UdacityUserData.sharedInstance.user.first!.firstName!
-            let lastName = UdacityUserData.sharedInstance.user.first!.lastName!
+            let firstName = UdacityClient.sharedInstance.firstName
+            let lastName = UdacityClient.sharedInstance.lastName
             
             let invalidLinkAlert = UIAlertController(title: "", message: "User \"\(firstName) \(lastName)\" Has Already Posted a Student Location. Would You Like to Overwrite That Location?", preferredStyle: .alert)
             
